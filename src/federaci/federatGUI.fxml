@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="federaci.ControllerGUI">
+   <children>
+      <BorderPane maxWidth="786.0" minWidth="786.0" prefHeight="1024.0" prefWidth="786.0">
+         <top>
+            <GridPane prefHeight="80.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="buttonStart" mnemonicParsing="false" onAction="#buttonStartAction" text="START">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="buttonStop" mnemonicParsing="false" text="STOP" textAlignment="CENTER" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </GridPane>
+         </top>
+         <center>
+            <TextArea fx:id="log" editable="false" maxWidth="686.0" minHeight="924.0" minWidth="686.0" prefHeight="924.0" prefWidth="686.0" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font></TextArea>
+         </center>
+         <right>
+            <GridPane alignment="CENTER" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <GridPane maxWidth="100.0" minWidth="100.0" prefWidth="100.0" GridPane.hgrow="NEVER" GridPane.vgrow="SOMETIMES">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="92.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="CENTER" text="Klient" textAlignment="CENTER">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="buttonKlientZwykly" mnemonicParsing="false" text="Zwykły" GridPane.rowIndex="1" />
+                        <Button fx:id="buttonKlientVIP" mnemonicParsing="false" text="VIP" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+                  <GridPane maxWidth="100.0" minWidth="100.0" prefWidth="100.0" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label prefWidth="41.0" text="Kasa">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="buttonKasaOtworz" mnemonicParsing="false" text="Otwórz" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+         </right>
+      </BorderPane>
+   </children>
+</AnchorPane>
