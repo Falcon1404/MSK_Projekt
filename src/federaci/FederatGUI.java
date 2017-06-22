@@ -35,7 +35,7 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                fedamb.czyStartSymulacji = true;
+                fedamb.setCzyStartSymulacji(true);
             }
         });
         panel.add(start);
@@ -49,7 +49,7 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                fedamb.czyStopSymulacji = true;
+                fedamb.setCzyStopSymulacji(true);
             }
         });
         panel.add(stop);
@@ -62,8 +62,8 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                fedamb.czyTworzycKlienta = true;
-                fedamb.czyTworzycVIP = false;
+                fedamb.setCzyTworzycKlienta(true);
+                fedamb.setCzyTworzycVIP(false);
             }
         });
         panel.add(nowyKlientZwykly);
@@ -77,8 +77,8 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                fedamb.czyTworzycKlienta = false;
-                fedamb.czyTworzycVIP = true;
+                fedamb.setCzyTworzycKlienta(false);
+                fedamb.setCzyTworzycVIP(true);
             }
         });
         panel.add(nowyVIP);
@@ -92,7 +92,7 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                fedamb.czyTworzycKase = true;
+                fedamb.setCzyTworzycKase(true);
             }
         });
         panel.add(nowaKasa);
@@ -153,30 +153,30 @@ public class FederatGUI extends AbstractFederat
     {
         while (fedamb.running)
         {
-            if(fedamb.czyStartSymulacji)
+            if(fedamb.getCzyStartSymulacji())
             {
+                fedamb.setCzyStartSymulacji(false);
                 sendStartInteraction();
-                fedamb.czyStartSymulacji = false;
             }
-            if(fedamb.czyStopSymulacji)
+            if(fedamb.getCzyStopSymulacji())
             {
+                fedamb.setCzyStopSymulacji(false);
                 sendStopInteraction();
-                fedamb.czyStopSymulacji = false;
             }
-            if(fedamb.czyTworzycKlienta)
+            if(fedamb.getCzyTworzycKlienta())
             {
+                fedamb.setCzyTworzycKlienta(false);
                 sendNowyKlientInteraction(generateAndAddKlient());
-                fedamb.czyTworzycKlienta = false;
             }
-            if(fedamb.czyTworzycVIP)
+            if(fedamb.getCzyTworzycVIP())
             {
-                sendNowyKlientInteraction(generateAndAddKlient());
-                fedamb.czyTworzycVIP= false;
+                fedamb.setCzyTworzycVIP(false);
+                sendNowyKlientInteraction(generateAndAddKlientVIP());
             }
-            if(fedamb.czyTworzycKase)
+            if(fedamb.getCzyTworzycKase())
             {
+                fedamb.setCzyTworzycKase(false);
                 sendNowaKasaInteraction(generateAndAddKasa());
-                fedamb.czyTworzycKase= false;
             }
             advanceTime(timeStep);
         }
@@ -188,6 +188,8 @@ public class FederatGUI extends AbstractFederat
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         fedamb.startSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_START_SYMULACJI);
         rtiamb.sendInteraction(fedamb.startSymulacjiHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+        log("sendStartInteraction");
     }
 
     private void sendStopInteraction() throws RTIexception
@@ -195,6 +197,8 @@ public class FederatGUI extends AbstractFederat
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         fedamb.stopSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_STOP_SYMULACJI);
         rtiamb.sendInteraction(fedamb.stopSymulacjiHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+        log("sendStopInteraction");
     }
 
     private void publishAndSubscribe()

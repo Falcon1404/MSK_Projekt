@@ -1,7 +1,5 @@
 package federaci;
 
-
-import ambasador.AbstractAmbassador;
 import ambasador.KasaAmbassador;
 import hla.rti.*;
 import model.Kasa;
@@ -45,75 +43,41 @@ public class FederatKasa extends AbstractFederat
     {
         while (fedamb.running)
         {
-            if(fedamb.czyStartSymulacji)
+            if(fedamb.getCzyStartSymulacji())
             {
-                if(fedamb.czyTworzycKlienta)
+                if(fedamb.getCzyTworzycKlienta())
                 {
                     Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
                             fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
                     listaKlientow.add(klient);
-                    fedamb.czyTworzycKlienta = false;
+                    fedamb.setCzyTworzycKlienta(false);
+                    log(federateName + " dodano klient " + fedamb.federatKlientIDAttributeValue);
                 }
-                if(fedamb.czyTworzycVIP)
+                if(fedamb.getCzyTworzycVIP())
                 {
                     Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
                             fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
                     listaKlientow.add(klient);
-                    fedamb.czyTworzycVIP = false;
+                    fedamb.setCzyTworzycVIP(false);
+                    log(federateName + " dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
                 }
-                if(fedamb.czyTworzycKase)
+                if(fedamb.getCzyTworzycKase())
                 {
                     Kasa kasa = new Kasa(fedamb.federatKasaIDAttributeValue, fedamb.federatKasaLiczbaKlientowWKolejceAttributeValue,
                             fedamb.federatKasaCzyPrzepelnionaAttributeValue);
                     listaKas.add(kasa);
-                    fedamb.czyTworzycKase = false;
+                    fedamb.setCzyTworzycKase(false);
+                    log(federateName + " dodano kase " + fedamb.federatKasaIDAttributeValue);
                 }
 
-                if(fedamb.czyStopSymulacji)
+                if(fedamb.getCzyStopSymulacji())
                 {
                     System.out.println("Amb: Odebrano Stop Interaction.");
                 }
             }
             advanceTime(timeStep);
-//            if(fedamb.czyTworzycKase)
-//            {
-//                //nowa kasa
-//                fedamb.czyTworzycKase = false;
-//            }
-//            if(fedamb.czyAktualizowacKase)
-//            {
-//                //aktualizacja wybranej kasy
-//                aktualizacjaKasy(fedamb.IDAktualizowanejKasy, fedamb.dlugoscKolejki, fedamb.czyPrzepelniona);
-//            }
-//
-//            //Pobieranie klientów do obsługi
-//            for(int i = 0; i < listaKas.size(); i++)
-//            {
-//                if(listaKas.get(i).aktualnieObslugiwanyKlient == null)
-//                {
-//                    if(listaKas.get(i).kolejkaKlientow.size() > 0)
-//                    {
-//                        listaKas.get(i).aktualnieObslugiwanyKlient = listaKas.get(i).kolejkaKlientow.get(0);
-//                    }
-//                }
-//            }
-//
-//            //Obsługiwanie klientów
-//            for(int i = 0; i < listaKas.size(); i++)
-//            {
-//                if(listaKas.get(i).aktualnieObslugiwanyKlient != null)
-//                {
-//                    boolean czyZostalObsluzony = listaKas.get(i).aktualnieObslugiwanyKlient.czyZostalObsluzony(fedamb.getFederateTime());
-//                    if(czyZostalObsluzony)
-//                    {
-//                        usunKlientaZKasy(listaKas.get(i).aktualnieObslugiwanyKlient.ID, listaKas.get(i).ID);
-//                        listaKas.get(i).aktualnieObslugiwanyKlient = null;
-//                    }
-//                }
-//            }
-//        }
         }
         disableTimePolicy();
     }
@@ -126,8 +90,6 @@ public class FederatKasa extends AbstractFederat
             subscribeStopSymulacji();
             subscribeKasa();
             subscribeKlient();
-
-//            subscribeOtworzKase();
         }
         catch(RTIexception e)
         {

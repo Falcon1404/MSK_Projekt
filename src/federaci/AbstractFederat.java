@@ -187,7 +187,6 @@ public abstract class AbstractFederat
         this.rtiamb.disableTimeConstrained();
     }
 
-
     public void subscribeKasa() throws RTIexception
     {
         fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
@@ -227,6 +226,7 @@ public abstract class AbstractFederat
     public void publishKlient() throws RTIexception
     {
         fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+
         fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
         fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
         fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
@@ -482,12 +482,14 @@ public abstract class AbstractFederat
 
         parameters.add(fedamb.federatKlientIDAttributeHandle, ID);
         parameters.add(fedamb.federatKlientCzasUtworzeniaAttributeHandle, czasUtworzenia);
-        parameters.add(fedamb.federatKlientCzasUtworzeniaAttributeHandle, czasZakonczeniaZakupow);
+        parameters.add(fedamb.federatKlientCzasZakonczeniaZakupowHandle, czasZakonczeniaZakupow);
         parameters.add(fedamb.federatKlientIloscGotowkiAttributeHandle, IloscGotowki);
         parameters.add(fedamb.federatKlientIloscTowarowAttributeHandle, IloscTowarow);
         parameters.add(fedamb.federatKlientCzyVIPAttributeHandle, czyVIP);
 
         rtiamb.sendInteraction(fedamb.federatKlientInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+        log(federateName + " wyslano klienta " + klient.ID);
     }
 
     public int getIDKlient()
@@ -538,7 +540,7 @@ public abstract class AbstractFederat
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
         listaKlientow.add(klient);
-        log("Dodano klienta " + ID);
+        log("Dodano klienta VIP " + ID);
         return klient;
     }
 
@@ -561,6 +563,8 @@ public abstract class AbstractFederat
         parameters.add(fedamb.federatKasaCzyPrzepelnionaAttributeHandle, czyPrzepelniona);
 
         rtiamb.sendInteraction(fedamb.federatKasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+        log(federateName + " wyslano kase " + kasa.ID);
     }
 
     public int getIDKasa()
@@ -585,6 +589,7 @@ public abstract class AbstractFederat
     {
         int ID = getIDKasa();
         Kasa kasa = new Kasa(ID, 0, false);
+        log("Dodano kase " + ID);
         return kasa;
     }
 

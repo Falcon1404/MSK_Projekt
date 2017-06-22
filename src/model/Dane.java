@@ -5,8 +5,8 @@ public class Dane
 {
     public static final String HLA_NOWY_KLIENT = "HLAinteractionRoot.NowyKlient";
     public static final String ID = "ID";
-    public static final String CZAS_UTWORZENIA = "ID";
-    public static final String CZAS_ZAKONCZENIA_ZAKUPOW = "ID";
+    public static final String CZAS_UTWORZENIA = "czasUtworzenia";
+    public static final String CZAS_ZAKONCZENIA_ZAKUPOW = "czasZakonczeniaZakupow";
     public static final String ILOSC_TOWAROW = "iloscTowarow";
     public static final String ILOSC_GOTOWKI = "iloscGotowki";
     public static final String CZY_VIP = "czyVIP";

@@ -4,6 +4,8 @@ import federaci.AbstractFederat;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.NullFederateAmbassador;
+import hla.rti.jlc.RtiFactoryFactory;
+import model.Dane;
 import org.portico.impl.hla13.types.DoubleTime;
 
 
@@ -25,9 +27,9 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
     public boolean running = true;
 
-    public boolean czyTworzycKlienta = false;
-    public boolean czyTworzycVIP = false;
-    public boolean czyTworzycKase = false;
+    private boolean czyTworzycKlienta = false;
+    private boolean czyTworzycVIP = false;
+    private boolean czyTworzycKase = false;
     public boolean czyAktualizowacKase = false;
     public int IDAktualizowanejKasy = -1;
     public int dlugoscKolejki = -1;
@@ -97,11 +99,11 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
     //Początek symulacji
     public int startSymulacjiHandle;
-    public boolean czyStartSymulacji = false;
+    private boolean czyStartSymulacji = false;
 
     //Koniec symulacji
     public int stopSymulacjiHandle;
-    public boolean czyStopSymulacji = false;
+    private boolean czyStopSymulacji = false;
 
 
     public AbstractAmbassador()
@@ -161,36 +163,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         }
     }
 
-
-    private void sendInteraction(double timeStep) throws RTIexception
-    {
-        //TODO
-//        for(int i = 0; i < federat.listaKlientow.size(); i++)
-//        {
-//            if(federat.listaKlientow.get(i).czySkonczylRobicZakupy)
-//            {
-//                IDKlientWKolejce = federat.listaKlientow.get(i).ID;
-//                NrKasyKlientaWKolejce = federat.listaKlientow.get(i).nrKasy;
-//                czasWejsciaDoKoljeki = 0;
-//
-//                SuppliedParameters parameters;
-//                try {
-//                    parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
-//                    parameters.add(IDKasaWejscieDoKolejkiInteractionAttributeHandle, EncodingHelpers.encodeInt(NrKasyKlientaWKolejce));
-//                    federat.rtiamb.sendInteraction(wejscieDoKolejkiInteractionHandle, parameters, generateTag());
-//                } catch (RTIexception e) {
-//                    log("Couldn't send queue entered interaction, because: " + e.getMessage());
-//                }
-//            }
-//            if(federat.listaKlientow.get(i).czyZostalObsluzony)
-//            {
-//
-//            }
-//        }
-
-    }
-
-
     public void timeRegulationEnabled(LogicalTime theFederateTime)
     {
         this.federateTime = convertTime(theFederateTime);
@@ -209,6 +181,11 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         this.isAdvancing = false;
     }
 
+//    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag)
+//    {
+//        receiveInteraction(interactionClass, theInteraction, tag, null, null);
+//    }
+
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
     {
         String message = "Interaction received handle= " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
@@ -220,16 +197,17 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
         if (interactionClass == startSymulacjiHandle)
         {
-            czyStartSymulacji = true;
+            setCzyStartSymulacji(true);
         }
 
         if (interactionClass == stopSymulacjiHandle)
         {
-            czyStopSymulacji = true;
+            setCzyStopSymulacji(true);
         }
 
         if (interactionClass == federatKlientInteractionHandle)
         {
+            log("Interaction federatKlientInteractionHandle received");
             for (int i = 0; i < theInteraction.size(); i++)
             {
                 try
@@ -238,6 +216,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                     if (theInteraction.getParameterHandle(i) == federatKlientIDAttributeHandle)
                     {
                         federatKlientIDAttributeValue = EncodingHelpers.decodeInt(value);
+                        log("Interaction received ID Value " + federatKlientIDAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzasUtworzeniaAttributeHandle)
                     {
@@ -267,13 +246,13 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
             }
             if (federatKlientCzyVIPAttributeValue)
             {
-                czyTworzycKlienta = false;
-                czyTworzycVIP = true;
+                setCzyTworzycKlienta(false);
+                setCzyTworzycVIP(true);
             }
             else
             {
-                czyTworzycKlienta = true;
-                czyTworzycVIP = false;
+                setCzyTworzycKlienta(true);
+                setCzyTworzycVIP(false);
             }
         }
 
@@ -302,8 +281,58 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                 {
                     log(e.getMessage());
                 }
-                czyTworzycKase = false;
+                setCzyTworzycKase(true);
             }
         }
+    }
+
+    public boolean getCzyTworzycKlienta()
+    {
+        return czyTworzycKlienta;
+    }
+
+    public boolean getCzyTworzycVIP()
+    {
+        return czyTworzycVIP;
+    }
+
+    public boolean getCzyTworzycKase()
+    {
+        return czyTworzycKase;
+    }
+
+    public void setCzyTworzycKlienta(boolean czyTworzycKlienta)
+    {
+        this.czyTworzycKlienta = czyTworzycKlienta;
+    }
+
+    public void setCzyTworzycVIP(boolean czyTworzycVIP)
+    {
+        this.czyTworzycVIP = czyTworzycVIP;
+    }
+
+    public void setCzyTworzycKase(boolean czyTworzycKase)
+    {
+        this.czyTworzycKase = czyTworzycKase;
+    }
+
+    public boolean getCzyStartSymulacji()
+    {
+        return czyStartSymulacji;
+    }
+
+    public void setCzyStartSymulacji(boolean czyStartSymulacji)
+    {
+        this.czyStartSymulacji = czyStartSymulacji;
+    }
+
+    public boolean getCzyStopSymulacji()
+    {
+        return czyStopSymulacji;
+    }
+
+    public void setCzyStopSymulacji(boolean czyStopSymulacji)
+    {
+        this.czyStopSymulacji = czyStopSymulacji;
     }
 }
