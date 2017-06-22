@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="federaci.ControllerGUI">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="federaci.ControllerGUI">
    <children>
       <BorderPane maxWidth="786.0" minWidth="786.0" prefHeight="1024.0" prefWidth="786.0">
          <top>
@@ -28,7 +28,7 @@
                         <Font size="24.0" />
                      </font>
                   </Button>
-                  <Button fx:id="buttonStop" mnemonicParsing="false" text="STOP" textAlignment="CENTER" GridPane.columnIndex="1">
+                  <Button fx:id="buttonStop" mnemonicParsing="false" onAction="#buttonStopAction" text="STOP" textAlignment="CENTER" GridPane.columnIndex="1">
                      <font>
                         <Font size="24.0" />
                      </font>

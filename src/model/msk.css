@@ -1,20 +1,18 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-
 /*
  * The MIT License (MIT)
- * 
+ *
  * Copyright (c) 2015 - AGIX | Innovative Engineering
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT 	SHALL THE
@@ -22,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *                                                                              
+ *
  */
 
 /*
@@ -55,7 +53,7 @@
 	/*default font */
 	-fx-font-family: 'Roboto Medium';
 	-fx-font-size: 14.0px;
-	-fx-disabled-opacity: 0.4;
+	-fx-disabled-opacity: 0.6;
 	/*default colors */
 	-swatch-grey: rgb(200.0, 200.0, 200.0);
 	-swatch-dark-grey: rgb(150.0, 150.0, 150.0);
@@ -90,7 +88,7 @@
 	-fx-background-color: rgb(255.0, 255.0, 255.0);
 	-fx-background-radius: 4.0;
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,
-		1.5);
+	1.5);
 	-fx-padding: 16 16 16 16;
 }
 
@@ -132,7 +130,7 @@
  ******************************************************************************/
 .button-raised {
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.30), 6.0, 0.3, 0,
-		1);
+	1);
 	-fx-background-color: rgb(250, 250, 250);
 }
 
@@ -166,13 +164,13 @@
 
 .toggle-button:focused:selected {
 	-fx-background-color: derive(-swatch-500, 50.0%),
-		derive(-swatch-500, -20.0%);
+	derive(-swatch-500, -20.0%);
 	-fx-background-insets: 0.0, 0.2em;
 	-fx-text-fill: -fx-text-button-colored;
 }
 
 .toggle-button:armed, .toggle-button:selected, .button:armed, .button:default:armed
-	{
+{
 	-fx-background-color: -swatch-grey;
 	-fx-text-fill: -fx-text-button-colored;
 }
@@ -222,7 +220,7 @@
 }
 
 .combo-box-base .arrow-button:hover .arrow, .spinner .increment-arrow-button:hover .increment-arrow,
-	.spinner .decrement-arrow-button:hover .decrement-arrow {
+.spinner .decrement-arrow-button:hover .decrement-arrow {
 	-fx-background-color: -swatch-dark-grey;
 }
 
@@ -244,7 +242,7 @@
 }
 
 .check-box>.box, .check-box>.box.unfocused, .check-box:disabled>.box,
-	.check-box:indeterminate>.box {
+.check-box:indeterminate>.box {
 	-fx-border-radius: 4.0;
 	-fx-border-color: -swatch-grey;
 	-fx-border-width: 2;
@@ -260,7 +258,7 @@
 
 .check-box:focused>.box {
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.30), 6.0, 0.3, 0,
-		0);
+	0);
 }
 
 .check-box:selected>.box>.mark {
@@ -291,15 +289,15 @@
 }
 
 .radio-menu-item:checked>.left-container>.radio, .check-menu-item:checked>.left-container>.check
-	{
+{
 	-fx-background-color: -swatch-dark-grey;
 	-fx-padding: 0.68em 0.5em 0.0em 0.0em;
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.2), 0.0, 0.0, 0.0,
-		1.0);
+	1.0);
 }
 
 .radio-menu-item>.left-container>.radio, .check-menu-item>.left-container>.check
-	{
+{
 	-fx-background-color: transparent;
 	-fx-padding: 0.68em 0.68em 0.0em 0.0em;
 }
@@ -328,7 +326,7 @@
 .title-bar .icon {
 	-fx-alignment: center-left;
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.2), 0.0, 0.0, 0.0,
-		1.0);
+	1.0);
 }
 
 .title-bar .title-label {
@@ -362,7 +360,7 @@
 }
 
 .date-picker-popup>*>.spinner>.button>.left-arrow, .date-picker-popup>*>.spinner>.button>.right-arrow
-	{
+{
 	-fx-background-color: white;
 }
 
@@ -376,7 +374,7 @@
 }
 
 .date-picker-popup>*>.day-name-cell, .date-picker-popup>*>.week-number-cell
-	{
+{
 	-fx-font-weight: normal;
 	-fx-text-fill: -swatch-dark-grey;
 	-fx-font-size: 1em;
@@ -521,7 +519,7 @@
 }
 
 .radio-button>.radio, .radio-button>.radio.unfocused, .radio-button:disabled>.radio,
-	.radio-button:selected>.radio {
+.radio-button:selected>.radio {
 	-fx-border-radius: 100.0;
 	-fx-border-color: -swatch-grey;
 	-fx-border-width: 2;
@@ -558,7 +556,7 @@
  *                                                                             *
  ******************************************************************************/
 .scroll-bar:vertical>.track-background, .scroll-bar:horizontal>.track-background
-	{
+{
 	-fx-background-color: -swatch-light-grey;
 	-fx-background-insets: 0.0;
 }
@@ -570,13 +568,13 @@
 }
 
 .scroll-bar>.increment-button, .scroll-bar>.decrement-button,
-	.scroll-bar:hover>.increment-button, .scroll-bar:hover>.decrement-button
-	{
+.scroll-bar:hover>.increment-button, .scroll-bar:hover>.decrement-button
+{
 	-fx-background-color: transparent;
 }
 
 .scroll-bar>.increment-button>.increment-arrow, .scroll-bar>.decrement-button>.decrement-arrow
-	{
+{
 	-fx-background-color: -swatch-dark-grey;
 }
 
@@ -636,7 +634,7 @@
 }
 
 .spinner .increment-arrow-button .increment-arrow, .spinner .decrement-arrow-button .decrement-arrow
-	{
+{
 	-fx-background-color: -swatch-grey;
 }
 
@@ -661,7 +659,7 @@
    TableColumn, and a 'filler' area that extends from the right-most column
    to the edge of the tableview, or up to the 'column control' button. */
 .table-view .filler, .tree-table-view .filler, .table-view .column-header,
-	.tree-table-view .column-header {
+.tree-table-view .column-header {
 	-fx-size: 65;
 	-fx-border-style: null;
 	-fx-border-color: -swatch-grey;
@@ -670,19 +668,19 @@
 }
 
 .table-view .show-hide-columns-button, .tree-table-view .show-hide-columns-button
-	{
+{
 	-fx-background-color: transparent;
 }
 
 .table-view .column-header .label, .table-view .filler .label,
-	.table-view .column-drag-header .label, .tree-table-view .column-header .label,
-	.tree-table-view .filler .label, .tree-table-view .column-drag-header .label
-	{
+.table-view .column-drag-header .label, .tree-table-view .column-header .label,
+.tree-table-view .filler .label, .tree-table-view .column-drag-header .label
+{
 	-fx-alignment: CENTER_LEFT;
 }
 
 .table-view .column-header-background, .tree-table-view .column-header-background
-	{
+{
 	-fx-background-color: transparent;
 }
 
@@ -770,7 +768,7 @@
 }
 
 .tool-bar .button:pressed, .tool-bar .toggle-button:pressed, .tool-bar .toggle-button:selected
-	{
+{
 	-fx-background-color: -swatch-grey;
 }
 
@@ -794,7 +792,7 @@
 }
 
 .toolbar-colored .button:pressed, .toolbar-colored .toggle-button:pressed,
-	.toolbar-colored .toggle-button:selected {
+.toolbar-colored .toggle-button:selected {
 	-fx-background-color: -swatch-200;
 }
 

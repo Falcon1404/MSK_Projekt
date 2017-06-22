@@ -2,52 +2,27 @@
 <objectModel DTDversion="1516.2" name="FederacjaSklepu" type="FOM"
              version="1.0">
     <objects>
-        <objectClass name="HLAobjectRoot" sharing="PublishSubscribe" />
-            <attribute name="HLAprivilegeToDeleteObject" dataType="NA"
-                       updateType="NA" updateCondition="NA" ownership="NoTransfer" sharing="PublishSubscribe"
-                       dimensions="NA" transportation="HLAreliable" order="TimeStamp" />
-            <objectClass name="Klient" sharing="PublishSubscribe"
-                         semantics="NA">
-                <attribute name="ID" dataType="HLAinteger32BE"
-                           updateType="Conditional" updateCondition="NA" ownership="NoTransfer"
-                           sharing="PublishSubscribe" dimensions="NA" transportation="HLAreliable"
-                           order="TimeStamp" semantics="NA" />
-                <attribute name="iloscTowarow" dataType="HLAinteger32BE" updateType="Conditional"
-                           updateCondition="NA" ownership="NoTransfer" sharing="PublishSubscribe"
-                           dimensions="NA" transportation="HLAreliable" order="TimeStamp"
-                           semantics="NA" />
-                <attribute name="czyVIP" dataType="HLAboolean"
-                           updateType="Conditional" updateCondition="NA" ownership="NoTransfer"
-                           sharing="PublishSubscribe" dimensions="NA" transportation="HLAreliable"
-                           order="TimeStamp" semantics="NA" />
-                <attribute name="nrKasy" dataType="HLAinteger32BE"
-                           updateType="Conditional" updateCondition="NA" ownership="NoTransfer"
-                           sharing="PublishSubscribe" dimensions="NA" transportation="HLAreliable"
-                           order="TimeStamp" semantics="NA" />
-                <attribute name="pozycjaWKolejce" dataType="HLAinteger32BE"
-                           updateType="Conditional" updateCondition="NA" ownership="NoTransfer"
-                           sharing="PublishSubscribe" dimensions="NA" transportation="HLAreliable"
-                           order="TimeStamp" semantics="NA" />
-            </objectClass>
-            <objectClass name="Kasa" sharing="PublishSubscribe"
-                         semantics="NA" order="TimeStamp">
-                <attribute name="ID" dataType="HLAinteger32BE" updateType="Conditional"
-                           updateCondition="NA" ownership="NoTransfer" sharing="PublishSubscribe"
-                           dimensions="NA" transportation="HLAreliable" order="TimeStamp"
-                           semantics="NA" />
-                <attribute name="liczbaKlientowWKolejce" dataType="HLAinteger32BE" updateType="Conditional"
-                           updateCondition="NA" ownership="NoTransfer" sharing="PublishSubscribe"
-                           dimensions="NA" transportation="HLAreliable" order="TimeStamp"
-                           semantics="NA" />
-				<attribute name="czPrzepelniona" dataType="HLAboolean" updateType="Conditional"
-                           updateCondition="NA" ownership="NoTransfer" sharing="PublishSubscribe"
-                           dimensions="NA" transportation="HLAreliable" order="TimeStamp"
-                           semantics="NA" />		   
-            </objectClass>
+        <objectClass name="HLAobjectRoot" sharing="PublishSubscribe"/>
     </objects>
     <interactions>
         <interactionClass name="HLAinteractionRoot" sharing="PublishSubscribe"
                           dimensions="NA" transportation="HLAreliable" order="Receive">
+            <interactionClass name="NowyKlient" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="Receive"
+                              semantics="NA">
+                <parameter name="ID" dataType="HLAinteger32BE" semantics="NA" />
+                <parameter name="czasUtworzeniaKlienta" dataType="HLAfloat64BE" semantics="NA" />
+                <parameter name="iloscGotowki" dataType="HLAfloat64BE" semantics="NA" />
+                <parameter name="iloscTowarow" dataType="HLAinteger32BE" semantics="NA" />
+                <parameter name="czyVIP" dataType="HLAboolean" semantics="NA" />
+            </interactionClass>
+            <interactionClass name="NowaKasa" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="Receive"
+                              semantics="NA">
+                <parameter name="ID" dataType="HLAinteger32BE" semantics="NA" />
+                <parameter name="liczbaKlientowWKolejce" dataType="HLAinteger32BE" semantics="NA" />
+                <parameter name="czyPrzepelniona" dataType="HLAboolean" semantics="NA" />
+            </interactionClass>
             <interactionClass name="RozpoczecieObslugi" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="Receive"
                               semantics="NA">
@@ -69,6 +44,14 @@
                            semantics="NA" />
             </interactionClass>
 			<interactionClass name="OtworzKase" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="Receive"
+                              semantics="NA">
+            </interactionClass>
+            <interactionClass name="StartSymulacji" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="Receive"
+                              semantics="NA">
+            </interactionClass>
+            <interactionClass name="StopSymulacji" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="Receive"
                               semantics="NA">
             </interactionClass>

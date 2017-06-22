@@ -293,3 +293,236 @@ org.portico.lrc.compat.JFederateNotExecutionMember:
 	at federaci.FederatKlient.createAndJoinFederation(FederatKlient.java:102)
 	at federaci.FederatKlient.runFederate(FederatKlient.java:29)
 	at federaci.FederatKlient.main(FederatKlient.java:18)
+ERROR [main] portico.lrc: 
+org.portico.lrc.compat.JFederateNotExecutionMember: 
+	at org.portico.lrc.LRCState.checkJoined(LRCState.java:387)
+	at org.portico.lrc.services.sync.handlers.outgoing.RegisterSyncPointHandler.process(RegisterSyncPointHandler.java:59)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.registerFederationSynchronizationPoint(Rti13Ambassador.java:470)
+	at federaci.AbstractFederat.registerSyncPoint(AbstractFederat.java:91)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:52)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: 
+org.portico.lrc.compat.JFederateNotExecutionMember: 
+	at org.portico.lrc.LRCState.checkJoined(LRCState.java:387)
+	at org.portico.lrc.services.sync.handlers.outgoing.RegisterSyncPointHandler.process(RegisterSyncPointHandler.java:59)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.registerFederationSynchronizationPoint(Rti13Ambassador.java:470)
+	at federaci.AbstractFederat.registerSyncPoint(AbstractFederat.java:91)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:53)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: FAILURE Exception encountered while processing incoming message: org.portico.impl.hla13.types.DoubleTime cannot be cast to org.portico.impl.hla1516.types.DoubleTime
+java.lang.ClassCastException: org.portico.impl.hla13.types.DoubleTime cannot be cast to org.portico.impl.hla1516.types.DoubleTime
+	at ambasador.AbstractAmbassador.convertTime(AbstractAmbassador.java:100)
+	at ambasador.AbstractAmbassador.timeRegulationEnabled(AbstractAmbassador.java:310)
+	at org.portico.impl.hla13.handlers.TimeRegulationEnabledCallbackHandler.process(TimeRegulationEnabledCallbackHandler.java:62)
+	at org.portico.utils.messaging.MessageChain.process(MessageChain.java:78)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.lrc.LRC.tickProcess(LRC.java:641)
+	at org.portico.lrc.LRC.tickUntilEmpty(LRC.java:469)
+	at org.portico.lrc.LRC.tick(LRC.java:433)
+	at org.portico.impl.hla13.Impl13Helper.tick(Impl13Helper.java:130)
+	at org.portico.impl.hla13.Rti13Ambassador.tick(Rti13Ambassador.java:5781)
+	at federaci.AbstractFederat.enableTimePolicy(AbstractFederat.java:161)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:68)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:43)
+	at federaci.FederatKlient.main(FederatKlient.java:19)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatKlient]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatKlient]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:27)
+	at federaci.FederatGUI.main(FederatGUI.java:15)
+ERROR [main] portico.lrc: federate name in use: GUIStart
+org.portico.lrc.compat.JFederateAlreadyExecutionMember: federate name in use: GUIStart
+	at org.portico.bindings.jgroups.LrcConnection.joinFederation(LrcConnection.java:260)
+	at org.portico.lrc.services.federation.handlers.outgoing.JoinFederationHandler.process(JoinFederationHandler.java:92)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.joinFederationExecution(Rti13Ambassador.java:321)
+	at federaci.AbstractFederat.joinFederation(AbstractFederat.java:78)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:29)
+	at federaci.FederatGUI.main(FederatGUI.java:15)
+ERROR [main] portico.lrc: 
+org.portico.lrc.compat.JFederateNotExecutionMember: 
+	at org.portico.lrc.LRCState.checkJoined(LRCState.java:387)
+	at org.portico.lrc.services.sync.handlers.outgoing.RegisterSyncPointHandler.process(RegisterSyncPointHandler.java:59)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.registerFederationSynchronizationPoint(Rti13Ambassador.java:470)
+	at federaci.AbstractFederat.registerSyncPoint(AbstractFederat.java:91)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:30)
+	at federaci.FederatGUI.main(FederatGUI.java:15)
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:27)
+	at federaci.FederatGUI.main(FederatGUI.java:15)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:135)
+	at federaci.FederatGUI.main(FederatGUI.java:122)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:135)
+	at federaci.FederatGUI.main(FederatGUI.java:122)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: Time [1410.0] has already passed (lbts:1411.0)
+org.portico.lrc.compat.JInvalidFederationTime: Time [1410.0] has already passed (lbts:1411.0)
+	at org.portico.lrc.LRCState.checkValidTime(LRCState.java:349)
+	at org.portico.lrc.services.object.handlers.outgoing.SendInteractionHandler.process(SendInteractionHandler.java:82)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.sendInteraction(Rti13Ambassador.java:2127)
+	at federaci.FederatGUI.sendStartInteraction(FederatGUI.java:172)
+	at federaci.FederatGUI.run(FederatGUI.java:153)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:143)
+	at federaci.FederatGUI.main(FederatGUI.java:122)
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:135)
+	at federaci.FederatGUI.main(FederatGUI.java:122)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:43)
+	at federaci.FederatKlient.main(FederatKlient.java:19)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatKlient]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatKlient]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:58)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:135)
+	at federaci.FederatGUI.main(FederatGUI.java:122)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: Error reading [file:/D:/Projekty/IdeaProjects/MSK%20-%20Projekt/src/fom/sklep.xml]: <objects> is missing HLAobjectRoot
+org.portico.lrc.compat.JErrorReadingFED: Error reading [file:/D:/Projekty/IdeaProjects/MSK%20-%20Projekt/src/fom/sklep.xml]: <objects> is missing HLAobjectRoot
+	at org.portico.impl.hla1516.fomparser.FOM.parseFOM(FOM.java:510)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.parseFed(CreateFederationHandler.java:143)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:66)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:59)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:46)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: name=ShopFederation
+org.portico.lrc.compat.JFederationExecutionDoesNotExist: name=ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.joinFederation(LrcConnection.java:248)
+	at org.portico.lrc.services.federation.handlers.outgoing.JoinFederationHandler.process(JoinFederationHandler.java:92)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.joinFederationExecution(Rti13Ambassador.java:321)
+	at federaci.AbstractFederat.joinFederation(AbstractFederat.java:79)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:50)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: 
+org.portico.lrc.compat.JFederateNotExecutionMember: 
+	at org.portico.lrc.LRCState.checkJoined(LRCState.java:387)
+	at org.portico.lrc.services.sync.handlers.outgoing.RegisterSyncPointHandler.process(RegisterSyncPointHandler.java:59)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.registerFederationSynchronizationPoint(Rti13Ambassador.java:470)
+	at federaci.AbstractFederat.registerSyncPoint(AbstractFederat.java:92)
+	at federaci.FederatKlient.runFederate(FederatKlient.java:53)
+	at federaci.FederatKlient.main(FederatKlient.java:22)
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:59)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:139)
+	at federaci.FederatGUI.main(FederatGUI.java:126)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered
+ERROR [main] portico.lrc: federation exists: ShopFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ShopFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at federaci.AbstractFederat.createFederation(AbstractFederat.java:59)
+	at federaci.FederatGUI.runFederate(FederatGUI.java:139)
+	at federaci.FederatGUI.main(FederatGUI.java:126)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ReadyToRun] by [FederatGUI]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ReadyToRun] by [FederatGUI]: label already registered

@@ -1,8 +1,10 @@
 package federaci;
 
-import ambasador.Ambasador;
+import ambasador.AbstractAmbassador;
 import hla.rti.*;
+import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
+import model.Dane;
 import model.Kasa;
 import model.Klient;
 import org.portico.impl.hla13.types.DoubleTime;
@@ -16,41 +18,28 @@ import java.util.*;
 
 public abstract class AbstractFederat
 {
-    public static final String ID = "ID";
-    public static final String ILOSC_TOWAROW = "iloscTowarow";
-    public static final String CZY_VIP = "czyVIP";
-    public static final String NR_KASY = "nrKasy";
-    public static final String POZYCJA_w_KOLEJCE = "pozycjaWKolejce";
-
-    public static final String LICZBA_KLIENTOW_w_KOLEJCE = "liczbaKlientowWKolejce";
-    public static final String CZY_PRZEPELNIONA = "czyPrzepelniona";
-
-    public static final String ID_KLIENT = "IDKlient";
-    public static final String ID_KASA = "IDKasa";
-
-    public static final String HLA_KLIENT = "HLAobjectRoot.Klient";
-    public static final String HLA_KASA = "HLAobjectRoot.Kasa";
-
-    public static final String HLA_ROZPOCZECIE_OBSLUGI = "HLAinteractionRoot.RozpoczecieObslugi";
-    public static final String HLA_ZAKONCZENIE_OBSLUGI = "HLAinteractionRoot.ZakonczenieObslugi";
-    public static final String HLA_WEJSCIE_DO_KOLEJKI = "HLAinteractionRoot.WejscieDoKolejki";
-    public static final String HLA_OTWORZ_KASE = "HLAinteractionRoot.OtworzKase";
-
     public static final String FOM_PATH = "src/fom/sklep.xml";
-    public static final String federationName = Ambasador.FEDERATION_NAME;
-    public static final String READY_TO_RUN = Ambasador.READY_TO_RUN;
-    //Mapa obiektów i ich klas
-    protected HashMap<Integer, Integer> objectAndClassHandleMap = new HashMap<>();
+    public static final String federationName = AbstractAmbassador.FEDERATION_NAME;
+    public static final String READY_TO_RUN = AbstractAmbassador.READY_TO_RUN;
+
+    private static final String federateName = "AbstractFederat";
+
     public ArrayList<Klient> listaKlientow = new ArrayList<>();
     public ArrayList<Kasa> listaKas = new ArrayList<>();
+    private Random rand = new Random();
     public final double timeStep = 10.0;
 
     public RTIambassador rtiamb;
-    public Ambasador fedamb;
+    public AbstractAmbassador fedamb;
 
-    private void log(String message)
+    protected static void log(String message)
     {
-        System.out.println("FederatKlient: " + message);
+        System.out.println(federateName + ": " + message);
+    }
+
+    public byte[] generateTag()
+    {
+        return ("" + System.currentTimeMillis()).getBytes();
     }
 
     protected void createFederation()
@@ -118,6 +107,7 @@ public abstract class AbstractFederat
                 rtIinternalError.printStackTrace();
             }
         }
+        fedamb.isAnnounced = false;
     }
 
     public void waitForUser()
@@ -191,153 +181,150 @@ public abstract class AbstractFederat
         }
     }
 
-
-    public void subscribeKasa() throws NameNotFound, FederateNotExecutionMember, RTIinternalError, ObjectClassNotDefined, ConcurrentAccessAttempted, AttributeNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    protected void disableTimePolicy() throws RTIexception
     {
-        /*HashMap<String, Class<?>> parametersAndTypes = new HashMap<>();
-        parametersAndTypes.put(ID, Integer.class);
-        parametersAndTypes.put(LICZBA_KLIENTOW_w_KOLEJCE, Integer.class);
-        parametersAndTypes.put(CZY_PRZEPELNIONA, Boolean.class);
-        fedamb.federatKasaClassHandle = setFomObject(rtiamb.getObjectClassHandle(HLA_KASA), parametersAndTypes);*/
-
-        fedamb.federatKasaClassHandle = rtiamb.getObjectClassHandle(HLA_KASA);
-        fedamb.federatKasaIDAttributeHandle = rtiamb.getAttributeHandle(ID, fedamb.federatKasaClassHandle);
-        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getAttributeHandle(LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaClassHandle);
-        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getAttributeHandle(CZY_PRZEPELNIONA, fedamb.federatKasaClassHandle);
-
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add(fedamb.federatKasaIDAttributeHandle);
-        attributes.add(fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle);
-        attributes.add(fedamb.federatKasaCzyPrzepelnionaAttributeHandle);
-
-        rtiamb.subscribeObjectClassAttributes(fedamb.federatKasaClassHandle, attributes);
+        this.rtiamb.disableTimeRegulation();
+        this.rtiamb.disableTimeConstrained();
     }
 
-    public void subscribeKlient() throws NameNotFound, FederateNotExecutionMember, RTIinternalError, ObjectClassNotDefined, ConcurrentAccessAttempted, AttributeNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+
+    public void subscribeKasa() throws RTIexception
     {
-        fedamb.federatKlientClassHandle = rtiamb.getObjectClassHandle(HLA_KLIENT);
-        fedamb.federatKlientIDAttributeHandle = rtiamb.getAttributeHandle(ID, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getAttributeHandle(ILOSC_TOWAROW, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getAttributeHandle(CZY_VIP, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientNrKasyAttributeHandle = rtiamb.getAttributeHandle(NR_KASY, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientPozycjaWKolejceAttributeHandle = rtiamb.getAttributeHandle(POZYCJA_w_KOLEJCE, fedamb.federatKlientClassHandle);
+        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
 
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add(fedamb.federatKlientIDAttributeHandle);
-        attributes.add(fedamb.federatKlientIloscTowarowAttributeHandle);
-        attributes.add(fedamb.federatKlientCzyVIPAttributeHandle);
-        attributes.add(fedamb.federatKlientNrKasyAttributeHandle);
-        attributes.add(fedamb.federatKlientPozycjaWKolejceAttributeHandle);
+        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
 
-        rtiamb.subscribeObjectClassAttributes(fedamb.federatKlientClassHandle, attributes);
+        rtiamb.subscribeInteractionClass(fedamb.federatKasaInteractionHandle);
     }
 
-    public void publishKasa() throws NameNotFound, FederateNotExecutionMember, RTIinternalError, ObjectClassNotDefined, ConcurrentAccessAttempted, AttributeNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void publishKasa() throws RTIexception
     {
-        fedamb.federatKasaClassHandle = rtiamb.getObjectClassHandle(HLA_KASA);
-        fedamb.federatKasaIDAttributeHandle = rtiamb.getAttributeHandle(ID, fedamb.federatKasaClassHandle);
-        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getAttributeHandle(LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaClassHandle);
-        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getAttributeHandle(CZY_PRZEPELNIONA, fedamb.federatKasaClassHandle);
+        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
 
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add(fedamb.federatKasaIDAttributeHandle);
-        attributes.add(fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle);
-        attributes.add(fedamb.federatKasaCzyPrzepelnionaAttributeHandle);
+        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
 
-        rtiamb.publishObjectClass(fedamb.federatKasaClassHandle, attributes);
+        rtiamb.publishInteractionClass(fedamb.federatKasaInteractionHandle);
     }
 
-    public void publishKlient() throws NameNotFound, FederateNotExecutionMember, RTIinternalError, ObjectClassNotDefined, ConcurrentAccessAttempted, AttributeNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void subscribeKlient() throws RTIexception
     {
-        /*HashMap<String, Class<?>> parametersAndTypes = new HashMap<>();
-        parametersAndTypes.put(ID, Integer.class);
-        parametersAndTypes.put(ILOSC_TOWAROW, Integer.class);
-        parametersAndTypes.put(NR_KASY, Integer.class);
-        parametersAndTypes.put(POZYCJA_w_KOLEJCE, Integer.class);
-        parametersAndTypes.put(CZY_VIP, Boolean.class);
-        fedamb.federatKlientClassHandle = setFomObject(rtiamb.getObjectClassHandle(HLA_KLIENT), parametersAndTypes);*/
+        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
 
-        fedamb.federatKlientClassHandle = rtiamb.getObjectClassHandle(HLA_KLIENT);
-        fedamb.federatKlientIDAttributeHandle = rtiamb.getAttributeHandle(ID, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getAttributeHandle(ILOSC_TOWAROW, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getAttributeHandle(CZY_VIP, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientNrKasyAttributeHandle = rtiamb.getAttributeHandle(NR_KASY, fedamb.federatKlientClassHandle);
-        fedamb.federatKlientPozycjaWKolejceAttributeHandle = rtiamb.getAttributeHandle(POZYCJA_w_KOLEJCE, fedamb.federatKlientClassHandle);
+        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
 
-        AttributeHandleSet attributes = RtiFactoryFactory.getRtiFactory().createAttributeHandleSet();
-        attributes.add(fedamb.federatKlientIDAttributeHandle);
-        attributes.add(fedamb.federatKlientIloscTowarowAttributeHandle);
-        attributes.add(fedamb.federatKlientCzyVIPAttributeHandle);
-        attributes.add(fedamb.federatKlientNrKasyAttributeHandle);
-        attributes.add(fedamb.federatKlientPozycjaWKolejceAttributeHandle);
-
-        rtiamb.publishObjectClass(fedamb.federatKlientClassHandle, attributes);
+        rtiamb.subscribeInteractionClass(fedamb.federatKlientInteractionHandle);
     }
 
-    public void publishWejscieDoKolejki() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void publishKlient() throws RTIexception
     {
-        fedamb.wejscieDoKolejkiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_WEJSCIE_DO_KOLEJKI);
-        fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.wejscieDoKolejkiInteractionHandle);
-        fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(ID_KASA, fedamb.wejscieDoKolejkiInteractionHandle);
+        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
+
+        rtiamb.publishInteractionClass(fedamb.federatKlientInteractionHandle);
+    }
+
+    public void publishWejscieDoKolejki() throws RTIexception
+    {
+        fedamb.wejscieDoKolejkiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_WEJSCIE_DO_KOLEJKI);
+        fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.wejscieDoKolejkiInteractionHandle);
+        fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.wejscieDoKolejkiInteractionHandle);
         rtiamb.publishInteractionClass(fedamb.wejscieDoKolejkiInteractionHandle);
     }
 
-    public void subscribeWejscieDoKolejki() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void subscribeWejscieDoKolejki() throws RTIexception
     {
-        fedamb.wejscieDoKolejkiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_WEJSCIE_DO_KOLEJKI);
-        fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.wejscieDoKolejkiInteractionHandle);
-        fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(ID_KASA, fedamb.wejscieDoKolejkiInteractionHandle);
+        fedamb.wejscieDoKolejkiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_WEJSCIE_DO_KOLEJKI);
+        fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.wejscieDoKolejkiInteractionHandle);
+        fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.wejscieDoKolejkiInteractionHandle);
         rtiamb.subscribeInteractionClass(fedamb.wejscieDoKolejkiInteractionHandle);
     }
 
-    public void publishRozpocznijObsluge() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void publishRozpocznijObsluge() throws RTIexception
     {
-        fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_ROZPOCZECIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
+        fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ROZPOCZECIE_OBSLUGI);
+        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
         rtiamb.publishInteractionClass(fedamb.rozpoczecieObslugiInteractionHandle);
     }
 
-    public void subscribeRozpocznijObsluge() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void subscribeRozpocznijObsluge() throws RTIexception
     {
-        fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_ROZPOCZECIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
+        fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ROZPOCZECIE_OBSLUGI);
+        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
         rtiamb.subscribeInteractionClass(fedamb.rozpoczecieObslugiInteractionHandle);
     }
 
-    public void publishZakonczObsluge() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void publishZakonczObsluge() throws RTIexception
     {
-        fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_ZAKONCZENIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ZAKONCZENIE_OBSLUGI);
+        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
         rtiamb.publishInteractionClass(fedamb.zakonczenieObslugiInteractionHandle);
     }
 
-    public void subscribeZakonczObsluge() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void subscribeZakonczObsluge() throws RTIexception
     {
-        fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(HLA_ZAKONCZENIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ZAKONCZENIE_OBSLUGI);
+        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
         rtiamb.subscribeInteractionClass(fedamb.zakonczenieObslugiInteractionHandle);
     }
 
-    public void publishOtworzKase() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void publishOtworzKase() throws RTIexception
     {
-        fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(HLA_OTWORZ_KASE);
+        fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_OTWORZ_KASE);
         rtiamb.publishInteractionClass(fedamb.otworzKaseInteractionHandle);
     }
 
-    public void subscribeOtworzKase() throws NameNotFound, ObjectClassNotDefined, FederateNotExecutionMember, RTIinternalError, FederateLoggingServiceCalls, ConcurrentAccessAttempted, InteractionClassNotDefined, RestoreInProgress, SaveInProgress, OwnershipAcquisitionPending
+    public void subscribeOtworzKase() throws RTIexception
     {
-        fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(HLA_OTWORZ_KASE);
+        fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_OTWORZ_KASE);
         rtiamb.subscribeInteractionClass(fedamb.otworzKaseInteractionHandle);
     }
 
-    private LogicalTime convertTime(double time)
+    public void publishStartSymulacji() throws RTIexception
     {
-        return new DoubleTime(time);
+        fedamb.startSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_START_SYMULACJI);
+        rtiamb.publishInteractionClass(fedamb.startSymulacjiHandle);
+    }
+
+    public void subscribeStartSymulacji() throws RTIexception
+    {
+        fedamb.startSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_START_SYMULACJI);
+        rtiamb.subscribeInteractionClass(fedamb.startSymulacjiHandle);
+    }
+
+    public void publishStopSymulacji() throws RTIexception
+    {
+        fedamb.stopSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_STOP_SYMULACJI);
+        rtiamb.publishInteractionClass(fedamb.stopSymulacjiHandle);
+    }
+
+    public void subscribeStopSymulacji() throws RTIexception
+    {
+        fedamb.stopSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_STOP_SYMULACJI);
+        rtiamb.subscribeInteractionClass(fedamb.stopSymulacjiHandle);
+    }
+
+    public LogicalTime convertTime(double time)
+    {
+        return (LogicalTime) new DoubleTime(time);
     }
 
     private LogicalTimeInterval convertInterval(double time)
     {
-        return new DoubleTimeInterval(time);
+        return (LogicalTimeInterval) new DoubleTimeInterval(time);
     }
 
     public void advanceTime(double timeToAdvance)
@@ -358,6 +345,12 @@ public abstract class AbstractFederat
         }
     }
 
+    private double getLbts()
+    {
+        return fedamb.federateTime + fedamb.federateLookahead;
+    }
+
+
     public void aktualizacjaKasy(int ID, int liczbaKlientowWKolejce, boolean czyPrzepelniona)
     {
         if(listaKas.size() > 0)
@@ -368,6 +361,22 @@ public abstract class AbstractFederat
                 {
                     listaKas.get(i).liczbaKlientowWKolejce = liczbaKlientowWKolejce;
                     listaKas.get(i).czyPrzepelniona = czyPrzepelniona;
+                }
+            }
+        }
+    }
+
+    public void aktualizacjaKlienta(int ID, int iloscTowarow, boolean czyVIP, int nrKasy)
+    {
+        if(listaKlientow.size() > 0)
+        {
+            for(int i = 0; i < listaKlientow.size(); i++)
+            {
+                if(listaKlientow.get(i).ID == ID)
+                {
+                    listaKlientow.get(i).iloscTowarow = iloscTowarow;
+                    listaKlientow.get(i).czyVIP = czyVIP;
+                    listaKlientow.get(i).nrKasy = nrKasy;
                 }
             }
         }
@@ -451,4 +460,132 @@ public abstract class AbstractFederat
             }
         }
     }
+
+    public void sendNowyKlientInteraction(Klient klient) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
+        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
+
+        byte[] ID = EncodingHelpers.encodeInt(klient.ID);
+        byte[] czasUtworzenia = EncodingHelpers.encodeDouble(klient.czasUtworzeniaKlienta);
+        byte[] czasZakonczeniaZakupow = EncodingHelpers.encodeDouble(klient.czasZakoczeniaZakupow);
+        byte[] IloscGotowki = EncodingHelpers.encodeDouble(klient.iloscGotowki);
+        byte[] IloscTowarow = EncodingHelpers.encodeInt(klient.iloscTowarow);
+        byte[] czyVIP = EncodingHelpers.encodeBoolean(klient.czyVIP);
+
+        parameters.add(fedamb.federatKlientIDAttributeHandle, ID);
+        parameters.add(fedamb.federatKlientCzasUtworzeniaAttributeHandle, czasUtworzenia);
+        parameters.add(fedamb.federatKlientCzasUtworzeniaAttributeHandle, czasZakonczeniaZakupow);
+        parameters.add(fedamb.federatKlientIloscGotowkiAttributeHandle, IloscGotowki);
+        parameters.add(fedamb.federatKlientIloscTowarowAttributeHandle, IloscTowarow);
+        parameters.add(fedamb.federatKlientCzyVIPAttributeHandle, czyVIP);
+
+        rtiamb.sendInteraction(fedamb.federatKlientInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+    }
+
+    public int getIDKlient()
+    {
+        int ID = 0;
+        if(listaKlientow.size() > 0)
+        {
+            ID = listaKlientow.get(0).ID;
+            for(int i = 1; i < listaKlientow.size(); i++)
+            {
+                if(ID < listaKlientow.get(i).ID)
+                {
+                    ID = listaKlientow.get(i).ID;
+                }
+            }
+            ID += 1;
+        }
+        return ID;
+    }
+
+    public Klient generateAndAddKlient() throws RTIexception
+    {
+        int ID = getIDKlient();
+        double czasUtworzeniaKlienta = fedamb.getFederateTime();
+        double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
+        double iloscGotowki = 0.0;
+        int iloscTowarow = rand.nextInt()*(6-1)+1;
+        for(int i = 0; i < iloscTowarow; i++)
+        {
+            iloscGotowki += rand.nextDouble()*(200.0 - 5.0) + 5.0;
+        }
+        Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki);
+        listaKlientow.add(klient);
+        log("Dodano klienta " + ID);
+        return klient;
+    }
+
+    public Klient generateAndAddKlientVIP() throws RTIexception
+    {
+        int ID = getIDKlient();
+        double czasUtworzeniaKlienta = fedamb.getFederateTime();
+        double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
+        double iloscGotowki = 0.0;
+        int iloscTowarow = rand.nextInt()*(6-1)+1;
+        for(int i = 0; i < iloscTowarow; i++)
+        {
+            iloscGotowki += rand.nextDouble()*(200.0 - 5.0) + 5.0;
+        }
+        Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
+        listaKlientow.add(klient);
+        log("Dodano klienta " + ID);
+        return klient;
+    }
+
+    public void sendNowaKasaInteraction(Kasa kasa) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
+
+        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
+        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
+
+        byte[] ID = EncodingHelpers.encodeInt(kasa.ID);
+        byte[] liczbaKlientowWKolejce = EncodingHelpers.encodeInt(kasa.liczbaKlientowWKolejce);
+        byte[] czyPrzepelniona = EncodingHelpers.encodeBoolean(kasa.czyPrzepelniona);
+
+        parameters.add(fedamb.federatKasaIDAttributeHandle, ID);
+        parameters.add(fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle, liczbaKlientowWKolejce);
+        parameters.add(fedamb.federatKasaCzyPrzepelnionaAttributeHandle, czyPrzepelniona);
+
+        rtiamb.sendInteraction(fedamb.federatKasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+    }
+
+    public int getIDKasa()
+    {
+        int ID = 0;
+        if(listaKas.size() > 0)
+        {
+            ID = listaKas.get(0).ID;
+            for(int i = 1; i < listaKas.size(); i++)
+            {
+                if(ID < listaKas.get(i).ID)
+                {
+                    ID = listaKas.get(i).ID;
+                }
+            }
+            ID += 1;
+        }
+        return ID;
+    }
+
+    public Kasa generateAndAddKasa()
+    {
+        int ID = getIDKasa();
+        Kasa kasa = new Kasa(ID, 0, false);
+        return kasa;
+    }
+
 }
