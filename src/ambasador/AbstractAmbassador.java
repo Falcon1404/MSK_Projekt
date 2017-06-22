@@ -188,7 +188,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
     {
-        String message = "Interaction received handle= " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
+        String message = "12. Interaction received handle = " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
         if (theTime != null)
         {
             message += ", time=" + convertTime(theTime);
@@ -197,17 +197,21 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
         if (interactionClass == startSymulacjiHandle)
         {
+//            log("receiveInteraction setCzyStartSymulacji " + getCzyStartSymulacji());
             setCzyStartSymulacji(true);
+//            log("receiveInteraction setCzyStartSymulacji " + getCzyStartSymulacji());
         }
 
         if (interactionClass == stopSymulacjiHandle)
         {
+//            log("receiveInteraction setCzyStopSymulacji " + getCzyStopSymulacji());
             setCzyStopSymulacji(true);
+//            log("receiveInteraction setCzyStopSymulacji " + getCzyStopSymulacji());
         }
 
         if (interactionClass == federatKlientInteractionHandle)
         {
-            log("Interaction federatKlientInteractionHandle received");
+            log("11. Interaction federatKlientInteractionHandle received");
             for (int i = 0; i < theInteraction.size(); i++)
             {
                 try
@@ -215,28 +219,33 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                     byte[] value = theInteraction.getValue(i);
                     if (theInteraction.getParameterHandle(i) == federatKlientIDAttributeHandle)
                     {
+//                        log("federatKlientIDAttributeValue = " + federatKlientIDAttributeValue);
                         federatKlientIDAttributeValue = EncodingHelpers.decodeInt(value);
-                        log("Interaction received ID Value " + federatKlientIDAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzasUtworzeniaAttributeHandle)
                     {
                         federatKlientCzasUtworzeniaAttributeValue = EncodingHelpers.decodeDouble(value);
+//                        log("federatKlientCzasUtworzeniaAttributeValue = " + federatKlientCzasUtworzeniaAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzasZakonczeniaZakupowHandle)
                     {
                         federatKlientCzasZakonczeniaZakupowValue = EncodingHelpers.decodeDouble(value);
+//                        log("federatKlientCzasZakonczeniaZakupowValue = " + federatKlientCzasZakonczeniaZakupowValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientIloscGotowkiAttributeHandle)
                     {
                         federatKlientIloscGotowkiAttributeValue = EncodingHelpers.decodeInt(value);
+//                        log("federatKlientIloscGotowkiAttributeValue = " + federatKlientIloscGotowkiAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientIloscTowarowAttributeHandle)
                     {
                         federatKlientIloscTowarowAttributeValue = EncodingHelpers.decodeInt(value);
+//                        log("federatKlientIloscTowarowAttributeValue = " + federatKlientIloscTowarowAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzyVIPAttributeHandle)
                     {
                         federatKlientCzyVIPAttributeValue = EncodingHelpers.decodeBoolean(value);
+//                        log("federatKlientCzyVIPAttributeValue = " + federatKlientCzyVIPAttributeValue);
                     }
                 }
                 catch (Exception e)
@@ -246,18 +255,27 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
             }
             if (federatKlientCzyVIPAttributeValue)
             {
+//                log("1. receiveInteraction get czyTworzycKlienta = " + getCzyTworzycKlienta());
+//                log("2. receiveInteraction get czyTworzycVIP = " + getCzyTworzycVIP());
                 setCzyTworzycKlienta(false);
                 setCzyTworzycVIP(true);
+//                log("3. receiveInteraction set czyTworzycKlienta = " + getCzyTworzycKlienta());
+//                log("4. receiveInteraction set czyTworzycVIP = " + getCzyTworzycVIP());
             }
             else
             {
+//                log("5. receiveInteraction get czyTworzycKlienta = " + getCzyTworzycKlienta());
+//                log("6. receiveInteraction get czyTworzycVIP = " + getCzyTworzycVIP());
                 setCzyTworzycKlienta(true);
                 setCzyTworzycVIP(false);
+//                log("7. receiveInteraction set czyTworzycKlienta = " + getCzyTworzycKlienta());
+//                log("8. receiveInteraction set czyTworzycVIP = " + getCzyTworzycVIP());
             }
         }
 
         if (interactionClass == federatKasaInteractionHandle)
         {
+            log("19. Interaction federatKlientInteractionHandle received");
             for (int i = 0; i < theInteraction.size(); i++)
             {
                 try
@@ -266,14 +284,17 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                     if (theInteraction.getParameterHandle(i) == federatKasaIDAttributeHandle)
                     {
                         federatKasaIDAttributeValue = EncodingHelpers.decodeInt(value);
+//                        log("federatKasaIDAttributeValue = " + federatKasaIDAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKasaLiczbaKlientowWKolejceAttributeHandle)
                     {
                         federatKasaLiczbaKlientowWKolejceAttributeValue = EncodingHelpers.decodeInt(value);
+//                        log("federatKasaLiczbaKlientowWKolejceAttributeValue = " + federatKasaLiczbaKlientowWKolejceAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKasaCzyPrzepelnionaAttributeHandle)
                     {
                         federatKasaCzyPrzepelnionaAttributeValue = EncodingHelpers.decodeBoolean(value);
+//                        log("federatKasaCzyPrzepelnionaAttributeValue = " + federatKasaCzyPrzepelnionaAttributeValue);
                     }
 
                 }
@@ -281,7 +302,9 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                 {
                     log(e.getMessage());
                 }
+//                log("9. receiveInteraction get czyTworzycKase = " + getCzyTworzycKase());
                 setCzyTworzycKase(true);
+//                log("10. receiveInteraction set czyTworzycKase = " + getCzyTworzycKase());
             }
         }
     }

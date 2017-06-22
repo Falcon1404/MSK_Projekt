@@ -516,14 +516,15 @@ public abstract class AbstractFederat
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
         double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
-        int iloscTowarow = rand.nextInt()*(6-1)+1;
+        int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
         {
             iloscGotowki += rand.nextDouble()*(200.0 - 5.0) + 5.0;
+
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki);
         listaKlientow.add(klient);
-        log("Dodano klienta " + ID);
+        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 
@@ -533,14 +534,14 @@ public abstract class AbstractFederat
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
         double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
-        int iloscTowarow = rand.nextInt()*(6-1)+1;
+        int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
         {
             iloscGotowki += rand.nextDouble()*(200.0 - 5.0) + 5.0;
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
         listaKlientow.add(klient);
-        log("Dodano klienta VIP " + ID);
+        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 
@@ -589,6 +590,7 @@ public abstract class AbstractFederat
     {
         int ID = getIDKasa();
         Kasa kasa = new Kasa(ID, 0, false);
+        listaKas.add(kasa);
         log("Dodano kase " + ID);
         return kasa;
     }

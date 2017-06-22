@@ -17,7 +17,7 @@ public class FederatKasa extends AbstractFederat
         try
         {
             new FederatKasa().runFederate();
-            log("Wystartowal " + federateName);
+            log("Wystartowal." );
         }
         catch(Exception e)
         {
@@ -52,7 +52,7 @@ public class FederatKasa extends AbstractFederat
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
                     listaKlientow.add(klient);
                     fedamb.setCzyTworzycKlienta(false);
-                    log(federateName + " dodano klient " + fedamb.federatKlientIDAttributeValue);
+                    log("16. " + federateName + " dodano klient " + fedamb.federatKlientIDAttributeValue);
                 }
                 if(fedamb.getCzyTworzycVIP())
                 {
@@ -61,7 +61,7 @@ public class FederatKasa extends AbstractFederat
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
                     listaKlientow.add(klient);
                     fedamb.setCzyTworzycVIP(false);
-                    log(federateName + " dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
+                    log("17. " + federateName + " dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
                 }
                 if(fedamb.getCzyTworzycKase())
                 {
@@ -69,7 +69,7 @@ public class FederatKasa extends AbstractFederat
                             fedamb.federatKasaCzyPrzepelnionaAttributeValue);
                     listaKas.add(kasa);
                     fedamb.setCzyTworzycKase(false);
-                    log(federateName + " dodano kase " + fedamb.federatKasaIDAttributeValue);
+                    log("18. " + federateName + " dodano kase " + fedamb.federatKasaIDAttributeValue);
                 }
 
                 if(fedamb.getCzyStopSymulacji())
