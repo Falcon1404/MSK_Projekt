@@ -24,7 +24,15 @@ public class Kasa
     {
         if(klient.czyVIP == true)
         {
-            kolejkaKlientow.add(0, klient);
+            int naKtoraPozycje = 0;
+            for(; naKtoraPozycje < kolejkaKlientow.size(); naKtoraPozycje++)
+            {
+                if(!kolejkaKlientow.get(naKtoraPozycje).czyVIP)
+                {
+                    break;
+                }
+            }
+            kolejkaKlientow.add(naKtoraPozycje, klient);
         }
         else
         {

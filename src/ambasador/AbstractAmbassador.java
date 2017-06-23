@@ -4,8 +4,6 @@ import federaci.AbstractFederat;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.NullFederateAmbassador;
-import hla.rti.jlc.RtiFactoryFactory;
-import model.Dane;
 import org.portico.impl.hla13.types.DoubleTime;
 
 
@@ -34,10 +32,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int IDAktualizowanejKasy = -1;
     public int dlugoscKolejki = -1;
     public boolean czyPrzepelniona = false;
-
-    public int IDKlientWKolejce = -1;
-    public int NrKasyKlientaWKolejce = -1;
-    public double czasWejsciaDoKoljeki;
 
     //------------Interakcje----------------------------
     //Klient
@@ -80,18 +74,25 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int IDKasaWejscieDoKolejkiInteractionAttributeHandle;
     public int IDKasaWejscieDoKolejkiInteractionAttributeValue;
     public double czasWejsciaDoKolejki;
+    private boolean czyKlientWszedlDoKolejki = false;
 
     //Rozpoczęcie obsługi
     public int rozpoczecieObslugiInteractionHandle;
     public int IDKlientRozpoczecieObslugiHandle;
     public int IDKlientRozpoczecieObslugiValue;
+    public int IDKasaRozpoczecieObslugiHandle;
+    public int IDKasaRozpoczecieObslugiValue;
     public double czasRozpoczeciaObslugi;
+    private boolean czyKlientJestObslugiwany = false;
 
     //Zakończenie obsługi
     public int zakonczenieObslugiInteractionHandle;
     public int IDKlientZakonczenieObslugiHandle;
     public int IDKlientZakonczenieObslugiValue;
+    public int IDKasaZakonczenieObslugiHandle;
+    public int IDKasaZakonczenieObslugiValue;
     public double czasZakonczeniaObslugi;
+    private boolean czyKlientZostalObsluzony = false;
 
     //Otwórz Kasę
     public int otworzKaseInteractionHandle;
@@ -106,9 +107,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     private boolean czyStopSymulacji = false;
 
 
-    public AbstractAmbassador()
-    {
-    }
+    public AbstractAmbassador() {}
 
     public double convertTime(LogicalTime logicalTime)
     {
@@ -181,37 +180,27 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         this.isAdvancing = false;
     }
 
-//    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag)
-//    {
-//        receiveInteraction(interactionClass, theInteraction, tag, null, null);
-//    }
-
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
     {
-        String message = "12. Interaction received handle = " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
-        if (theTime != null)
-        {
-            message += ", time=" + convertTime(theTime);
-        }
-        log(message);
+//        String message = "Interaction received handle = " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
+//        if (theTime != null)
+//        {
+//            message += ", time=" + convertTime(theTime);
+//        }
+//        log(message);
 
         if (interactionClass == startSymulacjiHandle)
         {
-//            log("receiveInteraction setCzyStartSymulacji " + getCzyStartSymulacji());
             setCzyStartSymulacji(true);
-//            log("receiveInteraction setCzyStartSymulacji " + getCzyStartSymulacji());
         }
 
         if (interactionClass == stopSymulacjiHandle)
         {
-//            log("receiveInteraction setCzyStopSymulacji " + getCzyStopSymulacji());
             setCzyStopSymulacji(true);
-//            log("receiveInteraction setCzyStopSymulacji " + getCzyStopSymulacji());
         }
 
         if (interactionClass == federatKlientInteractionHandle)
         {
-            log("11. Interaction federatKlientInteractionHandle received");
             for (int i = 0; i < theInteraction.size(); i++)
             {
                 try
@@ -219,33 +208,27 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                     byte[] value = theInteraction.getValue(i);
                     if (theInteraction.getParameterHandle(i) == federatKlientIDAttributeHandle)
                     {
-//                        log("federatKlientIDAttributeValue = " + federatKlientIDAttributeValue);
                         federatKlientIDAttributeValue = EncodingHelpers.decodeInt(value);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzasUtworzeniaAttributeHandle)
                     {
                         federatKlientCzasUtworzeniaAttributeValue = EncodingHelpers.decodeDouble(value);
-//                        log("federatKlientCzasUtworzeniaAttributeValue = " + federatKlientCzasUtworzeniaAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzasZakonczeniaZakupowHandle)
                     {
                         federatKlientCzasZakonczeniaZakupowValue = EncodingHelpers.decodeDouble(value);
-//                        log("federatKlientCzasZakonczeniaZakupowValue = " + federatKlientCzasZakonczeniaZakupowValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientIloscGotowkiAttributeHandle)
                     {
                         federatKlientIloscGotowkiAttributeValue = EncodingHelpers.decodeInt(value);
-//                        log("federatKlientIloscGotowkiAttributeValue = " + federatKlientIloscGotowkiAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientIloscTowarowAttributeHandle)
                     {
                         federatKlientIloscTowarowAttributeValue = EncodingHelpers.decodeInt(value);
-//                        log("federatKlientIloscTowarowAttributeValue = " + federatKlientIloscTowarowAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKlientCzyVIPAttributeHandle)
                     {
                         federatKlientCzyVIPAttributeValue = EncodingHelpers.decodeBoolean(value);
-//                        log("federatKlientCzyVIPAttributeValue = " + federatKlientCzyVIPAttributeValue);
                     }
                 }
                 catch (Exception e)
@@ -255,27 +238,18 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
             }
             if (federatKlientCzyVIPAttributeValue)
             {
-//                log("1. receiveInteraction get czyTworzycKlienta = " + getCzyTworzycKlienta());
-//                log("2. receiveInteraction get czyTworzycVIP = " + getCzyTworzycVIP());
                 setCzyTworzycKlienta(false);
                 setCzyTworzycVIP(true);
-//                log("3. receiveInteraction set czyTworzycKlienta = " + getCzyTworzycKlienta());
-//                log("4. receiveInteraction set czyTworzycVIP = " + getCzyTworzycVIP());
             }
             else
             {
-//                log("5. receiveInteraction get czyTworzycKlienta = " + getCzyTworzycKlienta());
-//                log("6. receiveInteraction get czyTworzycVIP = " + getCzyTworzycVIP());
                 setCzyTworzycKlienta(true);
                 setCzyTworzycVIP(false);
-//                log("7. receiveInteraction set czyTworzycKlienta = " + getCzyTworzycKlienta());
-//                log("8. receiveInteraction set czyTworzycVIP = " + getCzyTworzycVIP());
             }
         }
 
         if (interactionClass == federatKasaInteractionHandle)
         {
-            log("19. Interaction federatKlientInteractionHandle received");
             for (int i = 0; i < theInteraction.size(); i++)
             {
                 try
@@ -284,17 +258,14 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                     if (theInteraction.getParameterHandle(i) == federatKasaIDAttributeHandle)
                     {
                         federatKasaIDAttributeValue = EncodingHelpers.decodeInt(value);
-//                        log("federatKasaIDAttributeValue = " + federatKasaIDAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKasaLiczbaKlientowWKolejceAttributeHandle)
                     {
                         federatKasaLiczbaKlientowWKolejceAttributeValue = EncodingHelpers.decodeInt(value);
-//                        log("federatKasaLiczbaKlientowWKolejceAttributeValue = " + federatKasaLiczbaKlientowWKolejceAttributeValue);
                     }
                     if (theInteraction.getParameterHandle(i) == federatKasaCzyPrzepelnionaAttributeHandle)
                     {
                         federatKasaCzyPrzepelnionaAttributeValue = EncodingHelpers.decodeBoolean(value);
-//                        log("federatKasaCzyPrzepelnionaAttributeValue = " + federatKasaCzyPrzepelnionaAttributeValue);
                     }
 
                 }
@@ -302,9 +273,81 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                 {
                     log(e.getMessage());
                 }
-//                log("9. receiveInteraction get czyTworzycKase = " + getCzyTworzycKase());
                 setCzyTworzycKase(true);
-//                log("10. receiveInteraction set czyTworzycKase = " + getCzyTworzycKase());
+            }
+        }
+
+        if (interactionClass == wejscieDoKolejkiInteractionHandle)
+        {
+            for (int i = 0; i < theInteraction.size(); i++)
+            {
+                try
+                {
+                    byte[] value = theInteraction.getValue(i);
+                    if (theInteraction.getParameterHandle(i) == IDKlientWejscieDoKolejkiInteractionAttributeHandle)
+                    {
+                        IDKlientWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
+                    }
+                    if (theInteraction.getParameterHandle(i) == IDKasaWejscieDoKolejkiInteractionAttributeHandle)
+                    {
+                        IDKasaWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    log(e.getMessage());
+                }
+                setCzyKlientWszedlDoKolejki(true);
+            }
+        }
+
+        if(interactionClass == rozpoczecieObslugiInteractionHandle)
+        {
+            for (int i = 0; i < theInteraction.size(); i++)
+            {
+                try
+                {
+                    byte[] value = theInteraction.getValue(i);
+                    if (theInteraction.getParameterHandle(i) == IDKlientRozpoczecieObslugiHandle)
+                    {
+                        IDKlientRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
+                    }
+                    if (theInteraction.getParameterHandle(i) == IDKasaRozpoczecieObslugiHandle)
+                    {
+                        IDKasaRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log(e.getMessage());
+                }
+                setCzyKlientJestObslugiwany(true);
+            }
+        }
+
+        if(interactionClass == zakonczenieObslugiInteractionHandle)
+        {
+            for (int i = 0; i < theInteraction.size(); i++)
+            {
+                try
+                {
+                    byte[] value = theInteraction.getValue(i);
+                    if (theInteraction.getParameterHandle(i) == IDKlientZakonczenieObslugiHandle)
+                    {
+                        IDKlientZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
+                    }
+                    if (theInteraction.getParameterHandle(i) == IDKasaZakonczenieObslugiHandle)
+                    {
+                        IDKasaZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log(e.getMessage());
+                }
+//                log("Zakonczenie obslugi klienta " + IDKlientZakonczenieObslugiValue + " w kasie " + IDKasaZakonczenieObslugiValue);
+                setCzyKlientZostalObsluzony(true);
             }
         }
     }
@@ -357,5 +400,35 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public void setCzyStopSymulacji(boolean czyStopSymulacji)
     {
         this.czyStopSymulacji = czyStopSymulacji;
+    }
+
+    public boolean getCzyKlientWszedlDoKolejki()
+    {
+        return czyKlientWszedlDoKolejki;
+    }
+
+    public void setCzyKlientWszedlDoKolejki(boolean czyKlientWszedlDoKolejki)
+    {
+        this.czyKlientWszedlDoKolejki = czyKlientWszedlDoKolejki;
+    }
+
+    public boolean getCzyKlientJestObslugiwany()
+    {
+        return czyKlientJestObslugiwany;
+    }
+
+    public void setCzyKlientJestObslugiwany(boolean czyKlientJestObslugiwany)
+    {
+        this.czyKlientJestObslugiwany = czyKlientJestObslugiwany;
+    }
+
+    public boolean getCzyKlientZostalObsluzony()
+    {
+        return czyKlientZostalObsluzony;
+    }
+
+    public void setCzyKlientZostalObsluzony(boolean czyKlientZostalObsluzony)
+    {
+        this.czyKlientZostalObsluzony = czyKlientZostalObsluzony;
     }
 }

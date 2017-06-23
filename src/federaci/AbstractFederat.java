@@ -22,7 +22,7 @@ public abstract class AbstractFederat
     public static final String federationName = AbstractAmbassador.FEDERATION_NAME;
     public static final String READY_TO_RUN = AbstractAmbassador.READY_TO_RUN;
 
-    private static final String federateName = "AbstractFederat";
+    public static String federateName = "AbstractFederat";
 
     public ArrayList<Klient> listaKlientow = new ArrayList<>();
     public ArrayList<Kasa> listaKas = new ArrayList<>();
@@ -270,14 +270,16 @@ public abstract class AbstractFederat
     public void publishZakonczObsluge() throws RTIexception
     {
         fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ZAKONCZENIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.IDKlientZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.IDKasaZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.zakonczenieObslugiInteractionHandle);
         rtiamb.publishInteractionClass(fedamb.zakonczenieObslugiInteractionHandle);
     }
 
     public void subscribeZakonczObsluge() throws RTIexception
     {
         fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ZAKONCZENIE_OBSLUGI);
-        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.IDKlientZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.IDKasaZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.zakonczenieObslugiInteractionHandle);
         rtiamb.subscribeInteractionClass(fedamb.zakonczenieObslugiInteractionHandle);
     }
 
@@ -350,7 +352,6 @@ public abstract class AbstractFederat
         return fedamb.federateTime + fedamb.federateLookahead;
     }
 
-
     public void aktualizacjaKasy(int ID, int liczbaKlientowWKolejce, boolean czyPrzepelniona)
     {
         if(listaKas.size() > 0)
@@ -397,17 +398,6 @@ public abstract class AbstractFederat
                         listaKas.get(i).czyPrzepelniona = true;
                     }
                 }
-            }
-        }
-    }
-
-    public void aktualizujCzasRozpoczeciaObslugi(int ID, double czasRozpoczeciaObslugi)
-    {
-        for(int i = 0; i < listaKlientow.size(); i++)
-        {
-            if(listaKlientow.get(i).ID == ID)
-            {
-                listaKlientow.get(i).rozpoczecieObslugi = czasRozpoczeciaObslugi;
             }
         }
     }
@@ -461,6 +451,59 @@ public abstract class AbstractFederat
         }
     }
 
+    public void sendRozpoczecieObslugi(int IDKlient, int IDKasa) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ROZPOCZECIE_OBSLUGI);
+        fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
+        fedamb.IDKasaRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.rozpoczecieObslugiInteractionHandle);
+
+        byte[] IDKlientValue = EncodingHelpers.encodeInt(IDKlient);
+        byte[] IDKasaValue = EncodingHelpers.encodeInt(IDKasa);
+        parameters.add(fedamb.IDKlientRozpoczecieObslugiHandle, IDKlientValue);
+        parameters.add(fedamb.IDKasaRozpoczecieObslugiHandle, IDKasaValue);
+        rtiamb.sendInteraction(fedamb.rozpoczecieObslugiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+//        log("Klient " + IDKlient + " jest obslugiwany w kasie " + IDKasa);
+    }
+
+    public void sendZakonczenieObslugi(int IDKlient, int IDKasa) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.zakonczenieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ZAKONCZENIE_OBSLUGI);
+        fedamb.IDKlientZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.zakonczenieObslugiInteractionHandle);
+        fedamb.IDKasaZakonczenieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.zakonczenieObslugiInteractionHandle);
+
+        byte[] IDKlientValue = EncodingHelpers.encodeInt(IDKlient);
+        byte[] IDKasaValue = EncodingHelpers.encodeInt(IDKasa);
+        parameters.add(fedamb.IDKlientZakonczenieObslugiHandle, IDKlientValue);
+        parameters.add(fedamb.IDKasaZakonczenieObslugiHandle, IDKasaValue);
+        rtiamb.sendInteraction(fedamb.zakonczenieObslugiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+//        log("Klient " + IDKlient + " zostal obslzony w kasie " + IDKasa);
+    }
+
+    public void sendWejscieDoKolejki(int IDKlient, int IDKasa) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.wejscieDoKolejkiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_WEJSCIE_DO_KOLEJKI);
+        fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.wejscieDoKolejkiInteractionHandle);
+        fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.wejscieDoKolejkiInteractionHandle);
+
+        byte[] IDKlientValue = EncodingHelpers.encodeInt(IDKlient);
+        byte[] IDKasaValue = EncodingHelpers.encodeInt(IDKasa);
+
+        parameters.add(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeHandle, IDKlientValue);
+        parameters.add(fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle, IDKasaValue);
+
+        rtiamb.sendInteraction(fedamb.wejscieDoKolejkiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+
+//        log("Klient " + IDKlient + " wszedl do kasy " + IDKasa);
+    }
+
     public void sendNowyKlientInteraction(Klient klient) throws RTIexception
     {
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
@@ -489,7 +532,14 @@ public abstract class AbstractFederat
 
         rtiamb.sendInteraction(fedamb.federatKlientInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
-        log(federateName + " wyslano klienta " + klient.ID);
+        if(klient.czyVIP)
+        {
+            log("Stworzono klienta VIP " + klient.ID);
+        }
+        else
+        {
+            log("Stworzono klienta " + klient.ID);
+        }
     }
 
     public int getIDKlient()
@@ -524,7 +574,7 @@ public abstract class AbstractFederat
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki);
         listaKlientow.add(klient);
-        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
+//        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 
@@ -541,7 +591,7 @@ public abstract class AbstractFederat
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
         listaKlientow.add(klient);
-        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
+//        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 
@@ -565,7 +615,7 @@ public abstract class AbstractFederat
 
         rtiamb.sendInteraction(fedamb.federatKasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
-        log(federateName + " wyslano kase " + kasa.ID);
+        log("Wyslano kase " + kasa.ID);
     }
 
     public int getIDKasa()

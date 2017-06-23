@@ -1,5 +1,10 @@
 package ambasador;
 
+import hla.rti.EventRetractionHandle;
+import hla.rti.LogicalTime;
+import hla.rti.ReceivedInteraction;
+import hla.rti.jlc.EncodingHelpers;
+
 public class GUIAmbassador extends AbstractAmbassador
 {
     public static final String AMBASSADOR_NAME = "GUIFederatAmbsassor";
@@ -10,4 +15,5 @@ public class GUIAmbassador extends AbstractAmbassador
     {
         System.out.println(AMBASSADOR_NAME + ": " + message);
     }
+
 }

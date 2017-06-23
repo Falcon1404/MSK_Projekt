@@ -10,4 +10,5 @@ public class KasaAmbassador extends AbstractAmbassador
     {
         System.out.println(AMBASSADOR_NAME + ": " + message);
     }
+
 }

@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 
 public class FederatGUI extends AbstractFederat
 {
-    public static final String federateName = "FederatGUI";
     //GUI
     private JFrame frame;
     private JButton start;
@@ -22,11 +21,18 @@ public class FederatGUI extends AbstractFederat
     private JButton nowyKlientZwykly;
     private JButton nowyVIP;
     private JButton nowaKasa;
-    private JTextArea textArea;
+    private static JTextArea textArea;
     private JScrollPane scrollPane;
 
-    private void createWindow() {
-        frame = new JFrame("I6B2S4 Joanna Bednarko i Joanna_Koszela - " + federateName);
+    protected static void log(String message)
+    {
+        textArea.append(message + "\n");
+        System.out.println(federateName + ": " + message);
+    }
+
+    private void createWindow()
+    {
+        frame = new JFrame("I6B2S4 Joanna Bednarko i Joanna_Koszela");
         JPanel panel = new JPanel();
 
         nowyKlientZwykly = new JButton("Zwykly");
@@ -36,9 +42,7 @@ public class FederatGUI extends AbstractFederat
             public void actionPerformed(ActionEvent e)
             {
                 fedamb.setCzyTworzycKlienta(true);
-                //log("32. button setCzyTworzycKlienta = " + fedamb.getCzyTworzycKlienta());
                 fedamb.setCzyTworzycVIP(false);
-                //log("33. button setCzyTworzycVIP = " + fedamb.getCzyTworzycVIP());
             }
         });
         panel.add(nowyKlientZwykly);
@@ -53,9 +57,7 @@ public class FederatGUI extends AbstractFederat
             public void actionPerformed(ActionEvent e)
             {
                 fedamb.setCzyTworzycKlienta(false);
-//                log("34. button setCzyTworzycKlienta = " + fedamb.getCzyTworzycKlienta());
                 fedamb.setCzyTworzycVIP(true);
-//                log("35. button setCzyTworzycVIP = " + fedamb.getCzyTworzycVIP());
             }
         });
         panel.add(nowyVIP);
@@ -69,9 +71,7 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
-                //log("35. button setCzyTworzycKase = " + fedamb.getCzyTworzycKase());
                 fedamb.setCzyTworzycKase(true);
-                //log("36. button setCzyTworzycKase = " + fedamb.getCzyTworzycKase());
             }
         });
         panel.add(nowaKasa);
@@ -90,7 +90,6 @@ public class FederatGUI extends AbstractFederat
                 nowaKasa.setEnabled(true);
                 start.setEnabled(false);
                 stop.setEnabled(true);
-                //log("30. button setCzyStartSymulacji = " + fedamb.getCzyStartSymulacji());
             }
         });
         panel.add(start);
@@ -110,7 +109,6 @@ public class FederatGUI extends AbstractFederat
                 nowaKasa.setEnabled(false);
                 start.setEnabled(true);
                 stop.setEnabled(false);
-                //log("31. button setCzyStopSymulacji = " + fedamb.getCzyStopSymulacji());
             }
         });
         panel.add(stop);
@@ -154,6 +152,7 @@ public class FederatGUI extends AbstractFederat
     public void runFederate() throws RTIexception
     {
         createWindow();
+        federateName = "FederatGUI";
         fedamb = new GUIAmbassador();
         createFederation();
 
@@ -172,38 +171,44 @@ public class FederatGUI extends AbstractFederat
         {
             if(fedamb.getCzyStartSymulacji())
             {
-                //log("20. getCzyStartSymulacji = " + fedamb.getCzyStartSymulacji());
                 fedamb.setCzyStartSymulacji(false);
-                //log("21. getCzyStartSymulacji = " + fedamb.getCzyStartSymulacji());
                 sendStartInteraction();
             }
             if(fedamb.getCzyStopSymulacji())
             {
-                //log("22. getCzyStopSymulacji = " + fedamb.getCzyStopSymulacji());
                 fedamb.setCzyStopSymulacji(false);
-                //log("23. getCzyStopSymulacji = " + fedamb.getCzyStopSymulacji());
                 sendStopInteraction();
+                fedamb.running = false;
             }
             if(fedamb.getCzyTworzycKlienta())
             {
-                //log("24. getCzyTworzycKlienta = " + fedamb.getCzyTworzycKlienta());
                 fedamb.setCzyTworzycKlienta(false);
-                //log("25. getCzyTworzycKlienta = " + fedamb.getCzyTworzycKlienta());
                 sendNowyKlientInteraction(generateAndAddKlient());
             }
             if(fedamb.getCzyTworzycVIP())
             {
-                //log("26. getCzyTworzycVIP = " + fedamb.getCzyTworzycVIP());
                 fedamb.setCzyTworzycVIP(false);
-                //log("27. getCzyTworzycVIP = " + fedamb.getCzyTworzycVIP());
                 sendNowyKlientInteraction(generateAndAddKlientVIP());
             }
             if(fedamb.getCzyTworzycKase())
             {
-                //log("28. getCzyTworzycKase = " + fedamb.getCzyTworzycKase());
                 fedamb.setCzyTworzycKase(false);
-                //log("29. getCzyTworzycKase = " + fedamb.getCzyTworzycKase());
                 sendNowaKasaInteraction(generateAndAddKasa());
+            }
+            if(fedamb.getCzyKlientWszedlDoKolejki())
+            {
+                fedamb.setCzyKlientWszedlDoKolejki(false);
+                log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+            }
+            if(fedamb.getCzyKlientJestObslugiwany())
+            {
+                fedamb.setCzyKlientJestObslugiwany(false);
+                log("Klient " + fedamb.IDKlientRozpoczecieObslugiValue + " jest obslugiwany w kasie " + fedamb.IDKasaRozpoczecieObslugiValue);
+            }
+            if(fedamb.getCzyKlientZostalObsluzony())
+            {
+                fedamb.setCzyKlientZostalObsluzony(false);
+                log("Klient " + fedamb.IDKlientZakonczenieObslugiValue + " zostal obsluzony w kasie " + fedamb.IDKasaZakonczenieObslugiValue);
             }
             advanceTime(timeStep);
         }
@@ -216,7 +221,7 @@ public class FederatGUI extends AbstractFederat
         fedamb.startSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_START_SYMULACJI);
         rtiamb.sendInteraction(fedamb.startSymulacjiHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
-        log("sendStartInteraction");
+        log("Wysłano polecenie START.");
     }
 
     private void sendStopInteraction() throws RTIexception
@@ -225,7 +230,7 @@ public class FederatGUI extends AbstractFederat
         fedamb.stopSymulacjiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_STOP_SYMULACJI);
         rtiamb.sendInteraction(fedamb.stopSymulacjiHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
-        log("sendStopInteraction");
+        log("Wysłano polecenie STOP.");
     }
 
     private void publishAndSubscribe()
@@ -236,6 +241,9 @@ public class FederatGUI extends AbstractFederat
             publishStopSymulacji();
             publishKlient();
             publishKasa();
+            subscribeWejscieDoKolejki();
+            subscribeRozpocznijObsluge();
+            subscribeZakonczObsluge();
         }
         catch(RTIexception e)
         {
