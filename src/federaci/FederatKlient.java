@@ -61,7 +61,7 @@ public class FederatKlient extends AbstractFederat
                     Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
                             fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
-                    listaKlientow.add(klient);
+                    listaKlientow.add(0, klient);
                     fedamb.setCzyTworzycVIP(false);
                     log(federateName + " dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
                 }
@@ -73,27 +73,38 @@ public class FederatKlient extends AbstractFederat
                     fedamb.setCzyTworzycKase(false);
                     log(federateName + " dodano kase " + fedamb.federatKasaIDAttributeValue);
                 }
-                if(fedamb.getCzyKlientJestObslugiwany())
+
+                //Czy skończył robić zakupy
+                for (Klient klient : listaKlientow)
                 {
-                    fedamb.setCzyKlientJestObslugiwany(false);
+                    if(!klient.czyJestWKolejce && !klient.czySkonczylRobicZakupy && !klient.czyJestObslugiwany && !klient.czyZostalObsluzony)
+                    {
+                        klient.czySkonczylRobicZakupy(currentTime);
+                    }
+                }
+
+                if(fedamb.getCzyKlientZostalObsluzony())
+                {
+                    fedamb.setCzyKlientZostalObsluzony(false);
                     for (Klient klient : listaKlientow)
                     {
-                        if(klient.ID == fedamb.IDKlientRozpoczecieObslugiValue)
+                        if(klient.ID == fedamb.IDKlientZakonczenieObslugiValue)
                         {
-                            for(int i = 0; i < listaKas.size(); i++)
+                            if(!klient.czyJestWKolejce && klient.czySkonczylRobicZakupy && klient.czyJestObslugiwany && !klient.czyZostalObsluzony)
                             {
-                                if(listaKas.get(i).ID == fedamb.IDKasaRozpoczecieObslugiValue)
+                                for(Kasa kasa : listaKas)
                                 {
-                                    if(listaKas.get(i).aktualnieObslugiwanyKlient == null)
+//                                    log("Kasa " + listaKas.get(i).ID + " kolejka" + listaKas.get(i).liczbaKlientowWKolejce);
+                                    if(kasa.ID == fedamb.IDKasaZakonczenieObslugiValue)
                                     {
-                                        if(listaKas.get(i).liczbaKlientowWKolejce > 0)
+                                        if (kasa.aktualnieObslugiwanyKlient.ID == klient.ID)
                                         {
-                                            if(listaKas.get(i).kolejkaKlientow.get(0).ID == fedamb.IDKlientRozpoczecieObslugiValue)
-                                            {
-                                                listaKas.get(i).aktualnieObslugiwanyKlient = listaKas.get(i).kolejkaKlientow.remove(0);
-                                                listaKas.get(i).liczbaKlientowWKolejce--;
-                                                log("Klient " + listaKas.get(i).aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + listaKas.get(i).ID);
-                                            }
+                                            klient.czyZostalObsluzony = true;
+                                            kasa.aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
+                                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = true;
+                                            log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID
+                                                    + " po czasie " +  kasa.aktualnieObslugiwanyKlient.czasObslugi);
+                                            kasa.aktualnieObslugiwanyKlient = null;
                                         }
                                     }
                                 }
@@ -102,56 +113,24 @@ public class FederatKlient extends AbstractFederat
                     }
                 }
 
-                //Czy skończył robić zakupy
+                //Wybor kasy
                 for (Klient klient : listaKlientow)
                 {
-                    klient.czySkonczylRobicZakupy(currentTime);
-                }
-
-                //Czy może wyjsc z kasy
-                for (Klient klient : listaKlientow)
-                {
-                    if(klient.ID == fedamb.IDKlientZakonczenieObslugiValue)
-                    {
-                        if(klient.czySkonczylRobicZakupy && !klient.czyJestObslugiwany && klient.czyZostalObsluzony)
-                        {
-                            for(int i = 0; i < listaKas.size(); i++)
-                            {
-                                if(listaKas.get(i).ID == fedamb.IDKasaZakonczenieObslugiValue)
-                                {
-                                    if (listaKas.get(i).aktualnieObslugiwanyKlient.ID == klient.ID)
-                                    {
-                                        listaKas.get(i).aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
-                                        listaKas.get(i).aktualnieObslugiwanyKlient.czyZostalObsluzony = true;
-                                        sendZakonczenieObslugi(listaKas.get(i).aktualnieObslugiwanyKlient.ID, listaKas.get(i).ID);
-                                        log("Klient " + listaKas.get(i).aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + listaKas.get(i).ID
-                                                + " po czasie " +  listaKas.get(i).aktualnieObslugiwanyKlient.czasObslugi);
-                                        listaKas.get(i).aktualnieObslugiwanyKlient = null;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //Czy może wejść do kasy
-                for (Klient klient : listaKlientow)
-                {
-                    if(klient.czySkonczylRobicZakupy && !klient.czyJestWKolejce && !klient.czyJestObslugiwany)
+                    if(!klient.czyJestWKolejce && klient.czySkonczylRobicZakupy && !klient.czyJestObslugiwany && !klient.czyZostalObsluzony)
                     {
                         if(listaKas.size() > 0)
                         {
                             int IDKasa = -1;
                             int najkrotszaKolejka = Integer.MAX_VALUE;
 
-                            for(int i = 0; i < listaKas.size(); i++)
+                            for(Kasa kasa : listaKas)
                             {
-                                if(!listaKas.get(i).czyPrzepelniona)
+                                if(!kasa.czyPrzepelniona)
                                 {
-                                    if(listaKas.get(i).liczbaKlientowWKolejce < najkrotszaKolejka)
+                                    if(kasa.liczbaKlientowWKolejce < najkrotszaKolejka)
                                     {
-                                        IDKasa = listaKas.get(i).ID;
-                                        najkrotszaKolejka = listaKas.get(i).liczbaKlientowWKolejce;
+                                        IDKasa = kasa.ID;
+                                        najkrotszaKolejka = kasa.liczbaKlientowWKolejce;
                                     }
                                 }
                             }
@@ -169,6 +148,40 @@ public class FederatKlient extends AbstractFederat
                     }
                 }
 
+                //Obsługa klienta
+                if(fedamb.getCzyKlientJestObslugiwany())
+                {
+                    fedamb.setCzyKlientJestObslugiwany(false);
+                    for (Klient klient : listaKlientow)
+                    {
+                        if(klient.ID == fedamb.IDKlientRozpoczecieObslugiValue)
+                        {
+                            for(Kasa kasa : listaKas)
+                            {
+                                log("Kasa " + kasa.ID + " kolejka = " + kasa.liczbaKlientowWKolejce);
+                                if(kasa.ID == fedamb.IDKasaRozpoczecieObslugiValue)
+                                {
+                                    if(kasa.aktualnieObslugiwanyKlient == null)
+                                    {
+                                        if(kasa.liczbaKlientowWKolejce > 0)
+                                        {
+                                            if(kasa.kolejkaKlientow.get(0).ID == fedamb.IDKlientRozpoczecieObslugiValue)
+                                            {
+                                                klient.czyJestObslugiwany = true;
+                                                klient.czyZostalObsluzony = false;
+                                                klient.czyJestWKolejce = false;
+                                                kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
+                                                kasa.liczbaKlientowWKolejce--;
+                                                kasa.czyPrzepelniona = false;
+                                                log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
 
                 if(fedamb.getCzyStopSymulacji())

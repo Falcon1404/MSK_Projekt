@@ -60,7 +60,7 @@ public class FederatKasa extends AbstractFederat
                     Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
                             fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
                             fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
-                    listaKlientow.add(klient);
+                    listaKlientow.add(0, klient);
                     fedamb.setCzyTworzycVIP(false);
                     log("Dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
                 }
@@ -81,8 +81,10 @@ public class FederatKasa extends AbstractFederat
                     {
                         if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
                         {
+                            klient.czySkonczylRobicZakupy = true;
+                            klient.czyJestWKolejce = true;
                             dodajKlientaDoKasy(fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue, klient);
-                            fedamb.czasWejsciaDoKolejki = currentTime;
+                            klient.wejscieDoKolejki = currentTime;
                             log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie "
                                     + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
                         }
@@ -90,33 +92,58 @@ public class FederatKasa extends AbstractFederat
                 }
 
                 //Pobieranie klientów do obsługi
-                for(int i = 0; i < listaKas.size(); i++)
+                for(Kasa kasa : listaKas)
                 {
-                    if(listaKas.get(i).aktualnieObslugiwanyKlient == null)
+                    if(kasa.aktualnieObslugiwanyKlient == null)
                     {
-                        if(listaKas.get(i).liczbaKlientowWKolejce > 0)
+                        if(kasa.liczbaKlientowWKolejce > 0)
                         {
-                            listaKas.get(i).kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
-                            listaKas.get(i).aktualnieObslugiwanyKlient = listaKas.get(i).kolejkaKlientow.remove(0);
-                            listaKas.get(i).liczbaKlientowWKolejce--;
-                            sendRozpoczecieObslugi(listaKas.get(i).aktualnieObslugiwanyKlient.ID, listaKas.get(i).ID);
-                            log("Klient " + listaKas.get(i).aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + listaKas.get(i).ID);
+                            kasa.kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
+                            kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
+                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
+                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
+                            kasa.liczbaKlientowWKolejce--;
+                            kasa.czyPrzepelniona = false;
+
+                            for(Klient klient : listaKlientow)
+                            {
+                                if(klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
+                                {
+                                    klient.czyJestObslugiwany = true;
+                                    klient.czyZostalObsluzony = false;
+                                    klient.rozpoczecieObslugi = currentTime;
+                                }
+                            }
+                            sendRozpoczecieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
+                            log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID);
                         }
                     }
                 }
 
                 //Obsluga klientów
-                for(int i = 0; i < listaKas.size(); i++)
+                for(Kasa kasa : listaKas)
                 {
-                    if (listaKas.get(i).aktualnieObslugiwanyKlient != null)
+                    if (kasa.aktualnieObslugiwanyKlient != null)
                     {
-                        if(listaKas.get(i).aktualnieObslugiwanyKlient.czyZostalObsluzony(currentTime))
+                        if(kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony(currentTime))
                         {
-                            listaKas.get(i).aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
-                            listaKas.get(i).aktualnieObslugiwanyKlient.czyZostalObsluzony = true;
-                            sendZakonczenieObslugi(listaKas.get(i).aktualnieObslugiwanyKlient.ID, listaKas.get(i).ID);
-                            log("Klient " + listaKas.get(i).aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + listaKas.get(i).ID);
-                            listaKas.get(i).aktualnieObslugiwanyKlient = null;
+                            for(Klient klient : listaKlientow)
+                            {
+                                if(klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
+                                {
+                                    klient.czyJestWKolejce = false;
+                                    klient.czyJestObslugiwany = false;
+                                    klient.czyZostalObsluzony = true;
+                                    klient.zakonczenieObslugi = currentTime;
+                                }
+                            }
+                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = false;
+                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = true;
+                            kasa.aktualnieObslugiwanyKlient.czyJestWKolejce = false;
+                            kasa.aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
+                            sendZakonczenieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
+                            log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID);
+                            kasa.aktualnieObslugiwanyKlient = null;
                         }
                     }
                 }

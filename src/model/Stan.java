@@ -127,28 +127,22 @@ public class Stan
         appendToString("Wejscie:");
         for (Integer integer : terenSklepu)
         {
-            appendToString("/"+integer+"/  ");
+            appendToString("["+integer+"]  ");
         }
         appendToString("\n");
 
         listaKas.forEach((integer, integer2) -> {
-            if(integer!=0)
-            {
                 appendToString("" + integer + ":");
                 try
                 {
                     for (Integer integer4 : kolejkiDoKas.get(integer))
                     {
-                        appendToString("/" + integer4 + "/  ");
+                        appendToString(" [" + integer4 + "]  ");
                     }
                 }
                 catch (Exception e)
                 {
                 }
-            }
-            else
-            {
-            }
             appendToString("\n");
         });
         return string;

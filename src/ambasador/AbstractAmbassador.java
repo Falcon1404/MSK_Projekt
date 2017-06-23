@@ -346,7 +346,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                 {
                     log(e.getMessage());
                 }
-//                log("Zakonczenie obslugi klienta " + IDKlientZakonczenieObslugiValue + " w kasie " + IDKasaZakonczenieObslugiValue);
+                log("Zakonczenie obslugi klienta " + IDKlientZakonczenieObslugiValue + " w kasie " + IDKasaZakonczenieObslugiValue);
                 setCzyKlientZostalObsluzony(true);
             }
         }

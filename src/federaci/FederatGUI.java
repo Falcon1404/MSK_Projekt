@@ -175,6 +175,9 @@ public class FederatGUI extends AbstractFederat
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(1650, 600);
+        frame.setMaximumSize( new Dimension(1650, 600));
+        frame.setMinimumSize( new Dimension(1650, 600));
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
     }

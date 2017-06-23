@@ -10,7 +10,7 @@ public class Kasa
     public int ID;
     public int liczbaKlientowWKolejce;
     public boolean czyPrzepelniona;
-    public final int MAX_LICZBA_KLIENTOW = 5;
+    public final int MAX_LICZBA_KLIENTOW = 6;
 
     public Kasa(int ID, int liczbaKlientowWKolejce, boolean czyPrzepelniona)
     {

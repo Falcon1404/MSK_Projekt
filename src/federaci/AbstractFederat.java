@@ -396,6 +396,7 @@ public abstract class AbstractFederat
                     if(listaKas.get(i).liczbaKlientowWKolejce >= listaKas.get(i).MAX_LICZBA_KLIENTOW)
                     {
                         listaKas.get(i).czyPrzepelniona = true;
+                        //TODO sendOverloadInteraction
                     }
                 }
             }
@@ -564,7 +565,8 @@ public abstract class AbstractFederat
     {
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
-        double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
+//        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
+        double czasZakonczeniaZakupow = 200.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -582,7 +584,8 @@ public abstract class AbstractFederat
     {
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
-        double czasZakonczeniaZakupow = rand.nextDouble()*(800.0 - 400.0) + 400.0 + czasUtworzeniaKlienta;
+        //        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
+        double czasZakonczeniaZakupow = 200.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -590,7 +593,7 @@ public abstract class AbstractFederat
             iloscGotowki += rand.nextDouble()*(200.0 - 5.0) + 5.0;
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
-        listaKlientow.add(klient);
+        listaKlientow.add(0, klient);
 //        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
