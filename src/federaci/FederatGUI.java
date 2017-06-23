@@ -2,13 +2,17 @@ package federaci;
 
 
 import ambasador.GUIAmbassador;
-import hla.rti.LogicalTime;
 import hla.rti.RTIexception;
 import hla.rti.SuppliedParameters;
 import hla.rti.jlc.RtiFactoryFactory;
 import model.Dane;
+import model.Kasa;
+import model.Klient;
+import model.Stan;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,8 +25,13 @@ public class FederatGUI extends AbstractFederat
     private JButton nowyKlientZwykly;
     private JButton nowyVIP;
     private JButton nowaKasa;
+    private JLabel klientText;
+    private JLabel symulacjaText;
+    private JLabel kasaText;
     private static JTextArea textArea;
     private JScrollPane scrollPane;
+    private JTextArea textArea2;
+    private Stan stan;
 
     protected static void log(String message)
     {
@@ -32,8 +41,16 @@ public class FederatGUI extends AbstractFederat
 
     private void createWindow()
     {
-        frame = new JFrame("I6B2S4 Joanna Bednarko i Joanna_Koszela");
+        frame = new JFrame("I6B2S4 Joanna Bednarko i Joanna Koszela - Metody i techniki symulacji komputerowej");
         JPanel panel = new JPanel();
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        klientText = new JLabel("KLIENT");
+        klientText.setVisible(true);
+        klientText.setSize(100, 30);
+        klientText.setLocation(790, 270);
+        klientText.setFont(new Font("Calibri", Font.BOLD, 19));
+        panel.add(klientText);
 
         nowyKlientZwykly = new JButton("Zwykly");
         nowyKlientZwykly.setEnabled(false);
@@ -47,7 +64,7 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowyKlientZwykly);
         nowyKlientZwykly.setSize(100, 30);
-        nowyKlientZwykly.setLocation(350, 20);
+        nowyKlientZwykly.setLocation(770, 300);
 
 
         nowyVIP = new JButton("VIP");
@@ -62,8 +79,15 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowyVIP);
         nowyVIP.setSize(100, 30);
-        nowyVIP.setLocation(500, 20);
+        nowyVIP.setLocation(770, 340);
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        kasaText = new JLabel("KASA");
+        kasaText.setVisible(true);
+        kasaText.setSize(100, 30);
+        kasaText.setLocation(800, 400);
+        kasaText.setFont(new Font("Calibri", Font.BOLD, 19));
+        panel.add(kasaText);
 
         nowaKasa = new JButton("Nowa Kasa");
         nowaKasa.setEnabled(false);
@@ -76,9 +100,17 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowaKasa);
         nowaKasa.setSize(100, 30);
-        nowaKasa.setLocation(650, 20);
+        nowaKasa.setLocation(770, 430);
 
-        start = new JButton("Start");
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        symulacjaText = new JLabel("SYMULACJA");
+        symulacjaText.setVisible(true);
+        symulacjaText.setSize(100, 30);
+        symulacjaText.setLocation(775, 100);
+        symulacjaText.setFont(new Font("Calibri", Font.BOLD, 19));
+        panel.add(symulacjaText);
+
+        start = new JButton("START");
         start.setEnabled(true);
         start.addActionListener(new ActionListener()
         {
@@ -94,10 +126,9 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(start);
         start.setSize(100, 30);
-        start.setLocation(50, 20);
+        start.setLocation(770, 140);
 
-
-        stop = new JButton("Stop");
+        stop = new JButton("STOP");
         stop.setEnabled(false);
         stop.addActionListener(new ActionListener()
         {
@@ -113,7 +144,7 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(stop);
         stop.setSize(100, 30);
-        stop.setLocation(200, 20);
+        stop.setLocation(770, 180);
 
         textArea = new JTextArea();
         textArea.setEnabled(true);
@@ -125,6 +156,17 @@ public class FederatGUI extends AbstractFederat
         scrollPane.setLocation(50, 100);
         panel.add(scrollPane);
 
+        textArea2 = new JTextArea();
+        textArea2.setEnabled(true);
+        stan = new Stan(textArea2);
+        JScrollPane scrollPane2 = new JScrollPane();
+        scrollPane2.setViewportView(textArea2);
+        scrollPane2.setBounds(30, 65, 475, 180);
+        panel.add(scrollPane2);
+        DefaultCaret caret2 = (DefaultCaret) textArea2.getCaret();
+        caret2.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        scrollPane2.setSize(700, 400);
+        scrollPane2.setLocation(900, 100);
 
         frame.add(panel);
         frame.setContentPane(panel);
@@ -132,8 +174,9 @@ public class FederatGUI extends AbstractFederat
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setSize(800, 600);
+        frame.setSize(1650, 600);
         frame.setLocationRelativeTo(null);
+
     }
 
     public static void main(String[] args)
@@ -183,32 +226,57 @@ public class FederatGUI extends AbstractFederat
             if(fedamb.getCzyTworzycKlienta())
             {
                 fedamb.setCzyTworzycKlienta(false);
-                sendNowyKlientInteraction(generateAndAddKlient());
+                Klient klient = generateAndAddKlient();
+                sendNowyKlientInteraction(klient);
+                stan.dodajKlientNaTerenSklepu(klient.ID);
             }
             if(fedamb.getCzyTworzycVIP())
             {
                 fedamb.setCzyTworzycVIP(false);
-                sendNowyKlientInteraction(generateAndAddKlientVIP());
+                Klient klient = generateAndAddKlientVIP();
+                sendNowyKlientInteraction(klient);
+                stan.dodajKlientNaTerenSklepu(klient.ID);
             }
             if(fedamb.getCzyTworzycKase())
             {
                 fedamb.setCzyTworzycKase(false);
-                sendNowaKasaInteraction(generateAndAddKasa());
+                Kasa kasa = generateAndAddKasa();
+                sendNowaKasaInteraction(kasa);
+                stan.dodajKasa(kasa.ID);
             }
             if(fedamb.getCzyKlientWszedlDoKolejki())
             {
                 fedamb.setCzyKlientWszedlDoKolejki(false);
                 log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                stan.usunKlientaZTerenuSklepu(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue);
+                for (Klient klient : listaKlientow)
+                {
+                    if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
+                    {
+                        if(klient.czyVIP)
+                        {
+                            stan.dodajKlientaVIPDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                        }
+                        else
+                        {
+                            stan.dodajKlientaDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                        }
+                    }
+                }
             }
             if(fedamb.getCzyKlientJestObslugiwany())
             {
                 fedamb.setCzyKlientJestObslugiwany(false);
                 log("Klient " + fedamb.IDKlientRozpoczecieObslugiValue + " jest obslugiwany w kasie " + fedamb.IDKasaRozpoczecieObslugiValue);
+                stan.usunKlientaZKolejki(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
+                stan.klientJestObslugiwany(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
             }
             if(fedamb.getCzyKlientZostalObsluzony())
             {
                 fedamb.setCzyKlientZostalObsluzony(false);
                 log("Klient " + fedamb.IDKlientZakonczenieObslugiValue + " zostal obsluzony w kasie " + fedamb.IDKasaZakonczenieObslugiValue);
+                stan.usunKlientaZKasy(fedamb.IDKlientZakonczenieObslugiValue);
+                stan.usunKlienta(fedamb.IDKlientZakonczenieObslugiValue);
             }
             advanceTime(timeStep);
         }
