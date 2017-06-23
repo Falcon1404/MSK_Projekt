@@ -189,52 +189,52 @@ public abstract class AbstractFederat
 
     public void subscribeKasa() throws RTIexception
     {
-        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
+        fedamb.kasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
 
-        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
+        fedamb.kasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.kasaInteractionHandle);
+        fedamb.kasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.kasaInteractionHandle);
+        fedamb.kasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.kasaInteractionHandle);
 
-        rtiamb.subscribeInteractionClass(fedamb.federatKasaInteractionHandle);
+        rtiamb.subscribeInteractionClass(fedamb.kasaInteractionHandle);
     }
 
     public void publishKasa() throws RTIexception
     {
-        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
+        fedamb.kasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
 
-        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
+        fedamb.kasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.kasaInteractionHandle);
+        fedamb.kasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.kasaInteractionHandle);
+        fedamb.kasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.kasaInteractionHandle);
 
-        rtiamb.publishInteractionClass(fedamb.federatKasaInteractionHandle);
+        rtiamb.publishInteractionClass(fedamb.kasaInteractionHandle);
     }
 
     public void subscribeKlient() throws RTIexception
     {
-        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+        fedamb.nowyKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
 
-        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
+        fedamb.klientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.nowyKlientInteractionHandle);
 
-        rtiamb.subscribeInteractionClass(fedamb.federatKlientInteractionHandle);
+        rtiamb.subscribeInteractionClass(fedamb.nowyKlientInteractionHandle);
     }
 
     public void publishKlient() throws RTIexception
     {
-        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+        fedamb.nowyKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
 
-        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
+        fedamb.klientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.nowyKlientInteractionHandle);
 
-        rtiamb.publishInteractionClass(fedamb.federatKlientInteractionHandle);
+        rtiamb.publishInteractionClass(fedamb.nowyKlientInteractionHandle);
     }
 
     public void publishWejscieDoKolejki() throws RTIexception
@@ -257,6 +257,7 @@ public abstract class AbstractFederat
     {
         fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ROZPOCZECIE_OBSLUGI);
         fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
+        fedamb.IDKasaRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.rozpoczecieObslugiInteractionHandle);
         rtiamb.publishInteractionClass(fedamb.rozpoczecieObslugiInteractionHandle);
     }
 
@@ -264,6 +265,7 @@ public abstract class AbstractFederat
     {
         fedamb.rozpoczecieObslugiInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_ROZPOCZECIE_OBSLUGI);
         fedamb.IDKlientRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KLIENT, fedamb.rozpoczecieObslugiInteractionHandle);
+        fedamb.IDKasaRozpoczecieObslugiHandle = rtiamb.getParameterHandle(Dane.ID_KASA, fedamb.rozpoczecieObslugiInteractionHandle);
         rtiamb.subscribeInteractionClass(fedamb.rozpoczecieObslugiInteractionHandle);
     }
 
@@ -360,7 +362,7 @@ public abstract class AbstractFederat
             {
                 if(listaKas.get(i).ID == ID)
                 {
-                    listaKas.get(i).liczbaKlientowWKolejce = liczbaKlientowWKolejce;
+                    listaKas.get(i).setLiczbaKlientowWKolejce(liczbaKlientowWKolejce);
                     listaKas.get(i).czyPrzepelniona = czyPrzepelniona;
                 }
             }
@@ -391,9 +393,9 @@ public abstract class AbstractFederat
             {
                 if(listaKas.get(i).ID == ID)
                 {
-                    listaKas.get(i).liczbaKlientowWKolejce++;
+                    listaKas.get(i).setLiczbaKlientowWKolejce(listaKas.get(i).getLiczbaKlientowWKolejce()+1);
                     listaKas.get(i).addKlient(klient);
-                    if(listaKas.get(i).liczbaKlientowWKolejce >= listaKas.get(i).MAX_LICZBA_KLIENTOW)
+                    if(listaKas.get(i).getLiczbaKlientowWKolejce() >= listaKas.get(i).MAX_LICZBA_KLIENTOW)
                     {
                         listaKas.get(i).czyPrzepelniona = true;
                         //TODO sendOverloadInteraction
@@ -440,7 +442,7 @@ public abstract class AbstractFederat
         {
             if(listaKas.get(i).ID == IDKasa)
             {
-                listaKas.get(i).liczbaKlientowWKolejce--;
+                listaKas.get(i).setLiczbaKlientowWKolejce(listaKas.get(i).getLiczbaKlientowWKolejce()-1);
                 for(int j = 0; j < listaKas.get(i).kolejkaKlientow.size(); j++)
                 {
                     if(listaKas.get(i).kolejkaKlientow.get(j).ID == IDKlient)
@@ -509,13 +511,13 @@ public abstract class AbstractFederat
     {
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
 
-        fedamb.federatKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
-        fedamb.federatKlientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.federatKlientInteractionHandle);
-        fedamb.federatKlientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.federatKlientInteractionHandle);
+        fedamb.nowyKlientInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWY_KLIENT);
+        fedamb.klientIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasUtworzeniaAttributeHandle = rtiamb.getParameterHandle(Dane.CZAS_UTWORZENIA, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzasZakonczeniaZakupowHandle = rtiamb.getParameterHandle(Dane.CZAS_ZAKONCZENIA_ZAKUPOW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscGotowkiAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_GOTOWKI, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientIloscTowarowAttributeHandle = rtiamb.getParameterHandle(Dane.ILOSC_TOWAROW, fedamb.nowyKlientInteractionHandle);
+        fedamb.klientCzyVIPAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_VIP, fedamb.nowyKlientInteractionHandle);
 
         byte[] ID = EncodingHelpers.encodeInt(klient.ID);
         byte[] czasUtworzenia = EncodingHelpers.encodeDouble(klient.czasUtworzeniaKlienta);
@@ -524,14 +526,14 @@ public abstract class AbstractFederat
         byte[] IloscTowarow = EncodingHelpers.encodeInt(klient.iloscTowarow);
         byte[] czyVIP = EncodingHelpers.encodeBoolean(klient.czyVIP);
 
-        parameters.add(fedamb.federatKlientIDAttributeHandle, ID);
-        parameters.add(fedamb.federatKlientCzasUtworzeniaAttributeHandle, czasUtworzenia);
-        parameters.add(fedamb.federatKlientCzasZakonczeniaZakupowHandle, czasZakonczeniaZakupow);
-        parameters.add(fedamb.federatKlientIloscGotowkiAttributeHandle, IloscGotowki);
-        parameters.add(fedamb.federatKlientIloscTowarowAttributeHandle, IloscTowarow);
-        parameters.add(fedamb.federatKlientCzyVIPAttributeHandle, czyVIP);
+        parameters.add(fedamb.klientIDAttributeHandle, ID);
+        parameters.add(fedamb.klientCzasUtworzeniaAttributeHandle, czasUtworzenia);
+        parameters.add(fedamb.klientCzasZakonczeniaZakupowHandle, czasZakonczeniaZakupow);
+        parameters.add(fedamb.klientIloscGotowkiAttributeHandle, IloscGotowki);
+        parameters.add(fedamb.klientIloscTowarowAttributeHandle, IloscTowarow);
+        parameters.add(fedamb.klientCzyVIPAttributeHandle, czyVIP);
 
-        rtiamb.sendInteraction(fedamb.federatKlientInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+        rtiamb.sendInteraction(fedamb.nowyKlientInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
         if(klient.czyVIP)
         {
@@ -566,7 +568,7 @@ public abstract class AbstractFederat
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
 //        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
-        double czasZakonczeniaZakupow = 200.0 + czasUtworzeniaKlienta;
+        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -585,7 +587,7 @@ public abstract class AbstractFederat
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
         //        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
-        double czasZakonczeniaZakupow = 200.0 + czasUtworzeniaKlienta;
+        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -602,21 +604,21 @@ public abstract class AbstractFederat
     {
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
 
-        fedamb.federatKasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
+        fedamb.kasaInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_NOWA_KASA);
 
-        fedamb.federatKasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.federatKasaInteractionHandle);
-        fedamb.federatKasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.federatKasaInteractionHandle);
+        fedamb.kasaIDAttributeHandle = rtiamb.getParameterHandle(Dane.ID, fedamb.kasaInteractionHandle);
+        fedamb.kasaLiczbaKlientowWKolejceAttributeHandle = rtiamb.getParameterHandle(Dane.LICZBA_KLIENTOW_w_KOLEJCE, fedamb.kasaInteractionHandle);
+        fedamb.kasaCzyPrzepelnionaAttributeHandle = rtiamb.getParameterHandle(Dane.CZY_PRZEPELNIONA, fedamb.kasaInteractionHandle);
 
         byte[] ID = EncodingHelpers.encodeInt(kasa.ID);
-        byte[] liczbaKlientowWKolejce = EncodingHelpers.encodeInt(kasa.liczbaKlientowWKolejce);
+        byte[] liczbaKlientowWKolejce = EncodingHelpers.encodeInt(kasa.getLiczbaKlientowWKolejce());
         byte[] czyPrzepelniona = EncodingHelpers.encodeBoolean(kasa.czyPrzepelniona);
 
-        parameters.add(fedamb.federatKasaIDAttributeHandle, ID);
-        parameters.add(fedamb.federatKasaLiczbaKlientowWKolejceAttributeHandle, liczbaKlientowWKolejce);
-        parameters.add(fedamb.federatKasaCzyPrzepelnionaAttributeHandle, czyPrzepelniona);
+        parameters.add(fedamb.kasaIDAttributeHandle, ID);
+        parameters.add(fedamb.kasaLiczbaKlientowWKolejceAttributeHandle, liczbaKlientowWKolejce);
+        parameters.add(fedamb.kasaCzyPrzepelnionaAttributeHandle, czyPrzepelniona);
 
-        rtiamb.sendInteraction(fedamb.federatKasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+        rtiamb.sendInteraction(fedamb.kasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
         log("Wyslano kase " + kasa.ID);
     }

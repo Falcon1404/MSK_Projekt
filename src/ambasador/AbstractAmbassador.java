@@ -4,7 +4,10 @@ import federaci.AbstractFederat;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.NullFederateAmbassador;
+import model.MyInteraction;
 import org.portico.impl.hla13.types.DoubleTime;
+
+import java.util.ArrayList;
 
 
 public abstract class AbstractAmbassador extends NullFederateAmbassador
@@ -33,39 +36,41 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int dlugoscKolejki = -1;
     public boolean czyPrzepelniona = false;
 
+    public ArrayList<MyInteraction> listaInterakcji = new ArrayList<>();
+
     //------------Interakcje----------------------------
     //Klient
-    public int federatKlientInteractionHandle;
+    public int nowyKlientInteractionHandle;
 
-    public int federatKlientIDAttributeHandle;
-    public int federatKlientIDAttributeValue;
+    public int klientIDAttributeHandle;
+    public int klientIDAttributeValue;
 
-    public int federatKlientCzasUtworzeniaAttributeHandle;
-    public double federatKlientCzasUtworzeniaAttributeValue;
+    public int klientCzasUtworzeniaAttributeHandle;
+    public double klientCzasUtworzeniaAttributeValue;
 
-    public int federatKlientCzasZakonczeniaZakupowHandle;
-    public double federatKlientCzasZakonczeniaZakupowValue;
+    public int klientCzasZakonczeniaZakupowHandle;
+    public double klientCzasZakonczeniaZakupowValue;
 
-    public int federatKlientIloscGotowkiAttributeHandle;
-    public int federatKlientIloscGotowkiAttributeValue;
+    public int klientIloscGotowkiAttributeHandle;
+    public int klientIloscGotowkiAttributeValue;
 
-    public int federatKlientIloscTowarowAttributeHandle;
-    public int federatKlientIloscTowarowAttributeValue;
+    public int klientIloscTowarowAttributeHandle;
+    public int klientIloscTowarowAttributeValue;
 
-    public int federatKlientCzyVIPAttributeHandle;
-    public boolean federatKlientCzyVIPAttributeValue;
+    public int klientCzyVIPAttributeHandle;
+    public boolean klientCzyVIPAttributeValue;
 
     //Kasa
-    public int federatKasaInteractionHandle;
+    public int kasaInteractionHandle;
 
-    public int federatKasaIDAttributeHandle;
-    public int federatKasaIDAttributeValue;
+    public int kasaIDAttributeHandle;
+    public int kasaIDAttributeValue;
 
-    public int federatKasaLiczbaKlientowWKolejceAttributeHandle;
-    public int federatKasaLiczbaKlientowWKolejceAttributeValue;
+    public int kasaLiczbaKlientowWKolejceAttributeHandle;
+    public int kasaLiczbaKlientowWKolejceAttributeValue;
 
-    public int federatKasaCzyPrzepelnionaAttributeHandle;
-    public boolean federatKasaCzyPrzepelnionaAttributeValue;
+    public int kasaCzyPrzepelnionaAttributeHandle;
+    public boolean kasaCzyPrzepelnionaAttributeValue;
 
     //Wejście do kolejki
     public int wejscieDoKolejkiInteractionHandle;
@@ -73,7 +78,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int IDKlientWejscieDoKolejkiInteractionAttributeValue;
     public int IDKasaWejscieDoKolejkiInteractionAttributeHandle;
     public int IDKasaWejscieDoKolejkiInteractionAttributeValue;
-    public double czasWejsciaDoKolejki;
     private boolean czyKlientWszedlDoKolejki = false;
 
     //Rozpoczęcie obsługi
@@ -82,7 +86,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int IDKlientRozpoczecieObslugiValue;
     public int IDKasaRozpoczecieObslugiHandle;
     public int IDKasaRozpoczecieObslugiValue;
-    public double czasRozpoczeciaObslugi;
     private boolean czyKlientJestObslugiwany = false;
 
     //Zakończenie obsługi
@@ -91,7 +94,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int IDKlientZakonczenieObslugiValue;
     public int IDKasaZakonczenieObslugiHandle;
     public int IDKasaZakonczenieObslugiValue;
-    public double czasZakonczeniaObslugi;
     private boolean czyKlientZostalObsluzony = false;
 
     //Otwórz Kasę
@@ -180,63 +182,54 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         this.isAdvancing = false;
     }
 
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
+    public void obsluzStartSymulacji(ReceivedInteraction theInteraction, LogicalTime theTime)
     {
-//        String message = "Interaction received handle = " + interactionClass + ", tag " + EncodingHelpers.decodeString(tag) + " ";
-//        if (theTime != null)
-//        {
-//            message += ", time=" + convertTime(theTime);
-//        }
-//        log(message);
+        setCzyStartSymulacji(true);
+    }
 
-        if (interactionClass == startSymulacjiHandle)
-        {
-            setCzyStartSymulacji(true);
-        }
+    public void obsluzStopSymulacji(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        setCzyStopSymulacji(true);
+    }
 
-        if (interactionClass == stopSymulacjiHandle)
+    public void obsluzNowyKlientInteractionHandle(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
         {
-            setCzyStopSymulacji(true);
-        }
-
-        if (interactionClass == federatKlientInteractionHandle)
-        {
-            for (int i = 0; i < theInteraction.size(); i++)
+            try
             {
-                try
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == klientIDAttributeHandle)
                 {
-                    byte[] value = theInteraction.getValue(i);
-                    if (theInteraction.getParameterHandle(i) == federatKlientIDAttributeHandle)
-                    {
-                        federatKlientIDAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKlientCzasUtworzeniaAttributeHandle)
-                    {
-                        federatKlientCzasUtworzeniaAttributeValue = EncodingHelpers.decodeDouble(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKlientCzasZakonczeniaZakupowHandle)
-                    {
-                        federatKlientCzasZakonczeniaZakupowValue = EncodingHelpers.decodeDouble(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKlientIloscGotowkiAttributeHandle)
-                    {
-                        federatKlientIloscGotowkiAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKlientIloscTowarowAttributeHandle)
-                    {
-                        federatKlientIloscTowarowAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKlientCzyVIPAttributeHandle)
-                    {
-                        federatKlientCzyVIPAttributeValue = EncodingHelpers.decodeBoolean(value);
-                    }
+                    klientIDAttributeValue = EncodingHelpers.decodeInt(value);
                 }
-                catch (Exception e)
+                if (theInteraction.getParameterHandle(i) == klientCzasUtworzeniaAttributeHandle)
                 {
-                    log(e.getMessage());
+                    klientCzasUtworzeniaAttributeValue = EncodingHelpers.decodeDouble(value);
+                }
+                if (theInteraction.getParameterHandle(i) == klientCzasZakonczeniaZakupowHandle)
+                {
+                    klientCzasZakonczeniaZakupowValue = EncodingHelpers.decodeDouble(value);
+                }
+                if (theInteraction.getParameterHandle(i) == klientIloscGotowkiAttributeHandle)
+                {
+                    klientIloscGotowkiAttributeValue = EncodingHelpers.decodeInt(value);
+                }
+                if (theInteraction.getParameterHandle(i) == klientIloscTowarowAttributeHandle)
+                {
+                    klientIloscTowarowAttributeValue = EncodingHelpers.decodeInt(value);
+                }
+                if (theInteraction.getParameterHandle(i) == klientCzyVIPAttributeHandle)
+                {
+                    klientCzyVIPAttributeValue = EncodingHelpers.decodeBoolean(value);
                 }
             }
-            if (federatKlientCzyVIPAttributeValue)
+            catch (Exception e)
+            {
+                log(e.getMessage());
+            }
+
+            if (klientCzyVIPAttributeValue)
             {
                 setCzyTworzycKlienta(false);
                 setCzyTworzycVIP(true);
@@ -247,109 +240,115 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
                 setCzyTworzycVIP(false);
             }
         }
+    }
 
-        if (interactionClass == federatKasaInteractionHandle)
+
+    public void obsluzNowaKasa(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
         {
-            for (int i = 0; i < theInteraction.size(); i++)
+            try
             {
-                try
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == kasaIDAttributeHandle)
                 {
-                    byte[] value = theInteraction.getValue(i);
-                    if (theInteraction.getParameterHandle(i) == federatKasaIDAttributeHandle)
-                    {
-                        federatKasaIDAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKasaLiczbaKlientowWKolejceAttributeHandle)
-                    {
-                        federatKasaLiczbaKlientowWKolejceAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == federatKasaCzyPrzepelnionaAttributeHandle)
-                    {
-                        federatKasaCzyPrzepelnionaAttributeValue = EncodingHelpers.decodeBoolean(value);
-                    }
+                    kasaIDAttributeValue = EncodingHelpers.decodeInt(value);
+                }
+                if (theInteraction.getParameterHandle(i) == kasaLiczbaKlientowWKolejceAttributeHandle)
+                {
+                    kasaLiczbaKlientowWKolejceAttributeValue = EncodingHelpers.decodeInt(value);
+                }
+                if (theInteraction.getParameterHandle(i) == kasaCzyPrzepelnionaAttributeHandle)
+                {
+                    kasaCzyPrzepelnionaAttributeValue = EncodingHelpers.decodeBoolean(value);
+                }
 
-                }
-                catch (Exception e)
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
+            }
+            setCzyTworzycKase(true);
+        }
+    }
+
+
+
+    public void obsluzWejscieDoKolejki(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
+        {
+            try
+            {
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == IDKlientWejscieDoKolejkiInteractionAttributeHandle)
                 {
-                    log(e.getMessage());
+                    IDKlientWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
                 }
-                setCzyTworzycKase(true);
+                if (theInteraction.getParameterHandle(i) == IDKasaWejscieDoKolejkiInteractionAttributeHandle)
+                {
+                    IDKasaWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
+                }
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
             }
         }
+        setCzyKlientWszedlDoKolejki(true);
+    }
 
-        if (interactionClass == wejscieDoKolejkiInteractionHandle)
+    public void obsluzRozpoczecieObslugi(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
         {
-            for (int i = 0; i < theInteraction.size(); i++)
+            try
             {
-                try
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == IDKlientRozpoczecieObslugiHandle)
                 {
-                    byte[] value = theInteraction.getValue(i);
-                    if (theInteraction.getParameterHandle(i) == IDKlientWejscieDoKolejkiInteractionAttributeHandle)
-                    {
-                        IDKlientWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == IDKasaWejscieDoKolejkiInteractionAttributeHandle)
-                    {
-                        IDKasaWejscieDoKolejkiInteractionAttributeValue = EncodingHelpers.decodeInt(value);
-                    }
-
+                    IDKlientRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
                 }
-                catch (Exception e)
+                if (theInteraction.getParameterHandle(i) == IDKasaRozpoczecieObslugiHandle)
                 {
-                    log(e.getMessage());
+                    IDKasaRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
                 }
-                setCzyKlientWszedlDoKolejki(true);
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
             }
         }
+        setCzyKlientJestObslugiwany(true);
+    }
 
-        if(interactionClass == rozpoczecieObslugiInteractionHandle)
+    public void obsluzZakonczenieObslugi(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
         {
-            for (int i = 0; i < theInteraction.size(); i++)
+            try
             {
-                try
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == IDKlientZakonczenieObslugiHandle)
                 {
-                    byte[] value = theInteraction.getValue(i);
-                    if (theInteraction.getParameterHandle(i) == IDKlientRozpoczecieObslugiHandle)
-                    {
-                        IDKlientRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == IDKasaRozpoczecieObslugiHandle)
-                    {
-                        IDKasaRozpoczecieObslugiValue = EncodingHelpers.decodeInt(value);
-                    }
+                    IDKlientZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
                 }
-                catch (Exception e)
+                if (theInteraction.getParameterHandle(i) == IDKasaZakonczenieObslugiHandle)
                 {
-                    log(e.getMessage());
+                    IDKasaZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
                 }
-                setCzyKlientJestObslugiwany(true);
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
             }
         }
+        setCzyKlientZostalObsluzony(true);
+    }
 
-        if(interactionClass == zakonczenieObslugiInteractionHandle)
-        {
-            for (int i = 0; i < theInteraction.size(); i++)
-            {
-                try
-                {
-                    byte[] value = theInteraction.getValue(i);
-                    if (theInteraction.getParameterHandle(i) == IDKlientZakonczenieObslugiHandle)
-                    {
-                        IDKlientZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
-                    }
-                    if (theInteraction.getParameterHandle(i) == IDKasaZakonczenieObslugiHandle)
-                    {
-                        IDKasaZakonczenieObslugiValue = EncodingHelpers.decodeInt(value);
-                    }
-                }
-                catch (Exception e)
-                {
-                    log(e.getMessage());
-                }
-                log("Zakonczenie obslugi klienta " + IDKlientZakonczenieObslugiValue + " w kasie " + IDKasaZakonczenieObslugiValue);
-                setCzyKlientZostalObsluzony(true);
-            }
-        }
+    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
+    {
+        listaInterakcji.add(new MyInteraction(interactionClass, theInteraction, theTime));
     }
 
     public boolean getCzyTworzycKlienta()

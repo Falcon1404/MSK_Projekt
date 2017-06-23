@@ -32,7 +32,7 @@ public class Klient
         this.iloscTowarow = iloscTowarow;
         this.czasZakoczeniaZakupow = czasZakoczeniaZakupow;
 //        this.czasObslugi = iloscTowarow * 500.0;
-        this.czasObslugi = 200.0;
+        this.czasObslugi = 600.0;
     }
 
     public Klient(int ID, double czasUtworzeniaKlienta, double czasZakoczeniaZakupow, int iloscTowarow, double iloscGotowki, boolean czyVIP)
@@ -43,7 +43,7 @@ public class Klient
         this.iloscTowarow = iloscTowarow;
         this.czasZakoczeniaZakupow = czasZakoczeniaZakupow;
         //        this.czasObslugi = iloscTowarow * 500.0;
-        this.czasObslugi = 200.0;
+        this.czasObslugi = 600.0;
         this.czyVIP = czyVIP;
     }
 

@@ -8,7 +8,7 @@ public class Kasa
     public Klient aktualnieObslugiwanyKlient;
     public ArrayList<Klient> kolejkaKlientow = new ArrayList<>();
     public int ID;
-    public int liczbaKlientowWKolejce;
+    private int liczbaKlientowWKolejce;
     public boolean czyPrzepelniona;
     public final int MAX_LICZBA_KLIENTOW = 6;
 
@@ -40,4 +40,13 @@ public class Kasa
         }
     }
 
+    public void setLiczbaKlientowWKolejce(int liczbaKlientowWKolejce)
+    {
+        this.liczbaKlientowWKolejce = liczbaKlientowWKolejce;
+    }
+
+    public int getLiczbaKlientowWKolejce()
+    {
+        return liczbaKlientowWKolejce;
+    }
 }

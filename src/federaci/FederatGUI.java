@@ -5,10 +5,7 @@ import ambasador.GUIAmbassador;
 import hla.rti.RTIexception;
 import hla.rti.SuppliedParameters;
 import hla.rti.jlc.RtiFactoryFactory;
-import model.Dane;
-import model.Kasa;
-import model.Klient;
-import model.Stan;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -148,6 +145,7 @@ public class FederatGUI extends AbstractFederat
 
         textArea = new JTextArea();
         textArea.setEnabled(true);
+        textArea.setEditable(false);
         scrollPane = new JScrollPane();
         scrollPane.setViewportView(textArea);
         scrollPane.setBounds(30, 65, 475, 180);
@@ -158,6 +156,7 @@ public class FederatGUI extends AbstractFederat
 
         textArea2 = new JTextArea();
         textArea2.setEnabled(true);
+        textArea2.setEditable(false);
         stan = new Stan(textArea2);
         JScrollPane scrollPane2 = new JScrollPane();
         scrollPane2.setViewportView(textArea2);
@@ -215,6 +214,72 @@ public class FederatGUI extends AbstractFederat
     {
         while (fedamb.running)
         {
+            double currentTime = fedamb.getFederateTime();
+
+            for(MyInteraction myInteraction : fedamb.listaInterakcji)
+            {
+                if (myInteraction.interactionClass == fedamb.wejscieDoKolejkiInteractionHandle)
+                {
+                    fedamb.obsluzWejscieDoKolejki(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if (myInteraction.interactionClass == fedamb.rozpoczecieObslugiInteractionHandle)
+                {
+                    fedamb.obsluzRozpoczecieObslugi(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if (myInteraction.interactionClass == fedamb.zakonczenieObslugiInteractionHandle)
+                {
+                    fedamb.obsluzZakonczenieObslugi(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+                if(fedamb.getCzyKlientWszedlDoKolejki())
+                {
+                    fedamb.setCzyKlientWszedlDoKolejki(false);
+                    for (Klient klient : listaKlientow)
+                    {
+                        if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
+                        {
+                            log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                            stan.usunKlientaZTerenuSklepu(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue);
+                            if(klient.czyVIP)
+                            {
+                                stan.dodajKlientaVIPDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                            }
+                            else
+                            {
+                                stan.dodajKlientaDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                            }
+                        }
+                    }
+                }
+                if(fedamb.getCzyKlientJestObslugiwany())
+                {
+                    fedamb.setCzyKlientJestObslugiwany(false);
+                    for (Klient klient : listaKlientow)
+                    {
+                        if (klient.ID == fedamb.IDKlientRozpoczecieObslugiValue)
+                        {
+                            log("Klient " + fedamb.IDKlientRozpoczecieObslugiValue + " jest obslugiwany w kasie " + fedamb.IDKasaRozpoczecieObslugiValue);
+                            stan.usunKlientaZKolejki(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
+                            stan.klientJestObslugiwany(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
+                        }
+                    }
+                }
+                if(fedamb.getCzyKlientZostalObsluzony())
+                {
+                    fedamb.setCzyKlientZostalObsluzony(false);
+                    for (Klient klient : listaKlientow)
+                    {
+                        if (klient.ID == fedamb.IDKlientZakonczenieObslugiValue)
+                        {
+                            log("Klient " + fedamb.IDKlientZakonczenieObslugiValue + " zostal obsluzony w kasie " + fedamb.IDKasaZakonczenieObslugiValue);
+                            stan.usunKlientaZKasy(fedamb.IDKlientZakonczenieObslugiValue);
+                            stan.usunKlienta(fedamb.IDKlientZakonczenieObslugiValue);
+                        }
+                    }
+                }
+            }
+            fedamb.listaInterakcji.clear();
+
             if(fedamb.getCzyStartSymulacji())
             {
                 fedamb.setCzyStartSymulacji(false);
@@ -247,40 +312,7 @@ public class FederatGUI extends AbstractFederat
                 sendNowaKasaInteraction(kasa);
                 stan.dodajKasa(kasa.ID);
             }
-            if(fedamb.getCzyKlientWszedlDoKolejki())
-            {
-                fedamb.setCzyKlientWszedlDoKolejki(false);
-                log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
-                stan.usunKlientaZTerenuSklepu(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue);
-                for (Klient klient : listaKlientow)
-                {
-                    if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
-                    {
-                        if(klient.czyVIP)
-                        {
-                            stan.dodajKlientaVIPDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
-                        }
-                        else
-                        {
-                            stan.dodajKlientaDoKolejki(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue, fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
-                        }
-                    }
-                }
-            }
-            if(fedamb.getCzyKlientJestObslugiwany())
-            {
-                fedamb.setCzyKlientJestObslugiwany(false);
-                log("Klient " + fedamb.IDKlientRozpoczecieObslugiValue + " jest obslugiwany w kasie " + fedamb.IDKasaRozpoczecieObslugiValue);
-                stan.usunKlientaZKolejki(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
-                stan.klientJestObslugiwany(fedamb.IDKlientRozpoczecieObslugiValue, fedamb.IDKasaRozpoczecieObslugiValue);
-            }
-            if(fedamb.getCzyKlientZostalObsluzony())
-            {
-                fedamb.setCzyKlientZostalObsluzony(false);
-                log("Klient " + fedamb.IDKlientZakonczenieObslugiValue + " zostal obsluzony w kasie " + fedamb.IDKasaZakonczenieObslugiValue);
-                stan.usunKlientaZKasy(fedamb.IDKlientZakonczenieObslugiValue);
-                stan.usunKlienta(fedamb.IDKlientZakonczenieObslugiValue);
-            }
+
             advanceTime(timeStep);
         }
         disableTimePolicy();

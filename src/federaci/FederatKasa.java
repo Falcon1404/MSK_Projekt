@@ -4,12 +4,13 @@ import ambasador.KasaAmbassador;
 import hla.rti.*;
 import model.Kasa;
 import model.Klient;
+import model.MyInteraction;
 
 import java.util.Random;
 
 public class FederatKasa extends AbstractFederat
 {
-//    private static final String federateName = "FederatKasa";
+    //    private static final String federateName = "FederatKasa";
     private Random rand = new Random();
 
     public static void main(String[] args)
@@ -17,9 +18,9 @@ public class FederatKasa extends AbstractFederat
         try
         {
             new FederatKasa().runFederate();
-            log("Wystartowal." );
+            log("Wystartowal.");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -43,43 +44,69 @@ public class FederatKasa extends AbstractFederat
     {
         while (fedamb.running)
         {
-            if(fedamb.getCzyStartSymulacji())
+            double currentTime = fedamb.getFederateTime();
+            for (MyInteraction myInteraction : fedamb.listaInterakcji)
             {
-                double currentTime = fedamb.getFederateTime();
-                if(fedamb.getCzyTworzycKlienta())
+                if (myInteraction.interactionClass == fedamb.startSymulacjiHandle)
                 {
-                    Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
-                            fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
-                            fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
+                    fedamb.obsluzStartSymulacji(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+                if (myInteraction.interactionClass == fedamb.stopSymulacjiHandle)
+                {
+                    fedamb.obsluzStopSymulacji(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+                if (myInteraction.interactionClass == fedamb.nowyKlientInteractionHandle)
+                {
+                    fedamb.obsluzNowyKlientInteractionHandle(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+                if (myInteraction.interactionClass == fedamb.kasaInteractionHandle)
+                {
+                    fedamb.obsluzNowaKasa(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+                if (myInteraction.interactionClass == fedamb.wejscieDoKolejkiInteractionHandle)
+                {
+                    fedamb.obsluzWejscieDoKolejki(myInteraction.theInteraction, myInteraction.theTime);
+                }
+
+
+                if (fedamb.getCzyTworzycKlienta())
+                {
+                    Klient klient = new Klient(fedamb.klientIDAttributeValue, fedamb.klientCzasUtworzeniaAttributeValue,
+                            fedamb.klientCzasZakonczeniaZakupowValue, fedamb.klientIloscTowarowAttributeValue,
+                            fedamb.klientIloscGotowkiAttributeValue, fedamb.klientCzyVIPAttributeValue);
                     listaKlientow.add(klient);
                     fedamb.setCzyTworzycKlienta(false);
-                    log("16. " + federateName + " dodano klient " + fedamb.federatKlientIDAttributeValue);
+                    log("Dodano klient " + fedamb.klientIDAttributeValue);
                 }
-                if(fedamb.getCzyTworzycVIP())
+                if (fedamb.getCzyTworzycVIP())
                 {
-                    Klient klient = new Klient(fedamb.federatKlientIDAttributeValue, fedamb.federatKlientCzasUtworzeniaAttributeValue,
-                            fedamb.federatKlientCzasZakonczeniaZakupowValue, fedamb.federatKlientIloscTowarowAttributeValue,
-                            fedamb.federatKlientIloscGotowkiAttributeValue, fedamb.federatKlientCzyVIPAttributeValue);
+                    Klient klient = new Klient(fedamb.klientIDAttributeValue, fedamb.klientCzasUtworzeniaAttributeValue,
+                            fedamb.klientCzasZakonczeniaZakupowValue, fedamb.klientIloscTowarowAttributeValue,
+                            fedamb.klientIloscGotowkiAttributeValue, fedamb.klientCzyVIPAttributeValue);
                     listaKlientow.add(0, klient);
                     fedamb.setCzyTworzycVIP(false);
-                    log("Dodano klient VIP " + fedamb.federatKlientIDAttributeValue);
+                    log("Dodano klient VIP " + fedamb.klientIDAttributeValue);
                 }
-                if(fedamb.getCzyTworzycKase())
+                if (fedamb.getCzyTworzycKase())
                 {
-                    Kasa kasa = new Kasa(fedamb.federatKasaIDAttributeValue, fedamb.federatKasaLiczbaKlientowWKolejceAttributeValue,
-                            fedamb.federatKasaCzyPrzepelnionaAttributeValue);
+                    Kasa kasa = new Kasa(fedamb.kasaIDAttributeValue, fedamb.kasaLiczbaKlientowWKolejceAttributeValue,
+                            fedamb.kasaCzyPrzepelnionaAttributeValue);
                     listaKas.add(kasa);
                     fedamb.setCzyTworzycKase(false);
-                    log("Dodano kase " + fedamb.federatKasaIDAttributeValue);
+                    log("Dodano kase " + fedamb.kasaIDAttributeValue);
                 }
 
                 //Wejście do kolejki
-                if(fedamb.getCzyKlientWszedlDoKolejki())
+                if (fedamb.getCzyKlientWszedlDoKolejki())
                 {
                     fedamb.setCzyKlientWszedlDoKolejki(false);
                     for (Klient klient : listaKlientow)
                     {
-                        if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
+                        if (klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
                         {
                             klient.czySkonczylRobicZakupy = true;
                             klient.czyJestWKolejce = true;
@@ -91,45 +118,36 @@ public class FederatKasa extends AbstractFederat
                     }
                 }
 
-                //Pobieranie klientów do obsługi
-                for(Kasa kasa : listaKas)
+
+
+                if (fedamb.getCzyStopSymulacji())
                 {
-                    if(kasa.aktualnieObslugiwanyKlient == null)
-                    {
-                        if(kasa.liczbaKlientowWKolejce > 0)
-                        {
-                            kasa.kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
-                            kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
-                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
-                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
-                            kasa.liczbaKlientowWKolejce--;
-                            kasa.czyPrzepelniona = false;
-
-                            for(Klient klient : listaKlientow)
-                            {
-                                if(klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
-                                {
-                                    klient.czyJestObslugiwany = true;
-                                    klient.czyZostalObsluzony = false;
-                                    klient.rozpoczecieObslugi = currentTime;
-                                }
-                            }
-                            sendRozpoczecieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
-                            log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID);
-                        }
-                    }
+                    System.out.println("Amb: Odebrano Stop Interaction.");
+                    fedamb.running = false;
                 }
+            }
+            fedamb.listaInterakcji.clear();
 
+            for(Kasa kasa : listaKas)
+            {
+                kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
+                if(kasa.getLiczbaKlientowWKolejce() < kasa.MAX_LICZBA_KLIENTOW)
+                {
+                    kasa.czyPrzepelniona = false;
+                }
+            }
+            if (fedamb.getCzyStartSymulacji())
+            {
                 //Obsluga klientów
-                for(Kasa kasa : listaKas)
+                for (Kasa kasa : listaKas)
                 {
                     if (kasa.aktualnieObslugiwanyKlient != null)
                     {
-                        if(kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony(currentTime))
+                        if (kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony(currentTime))
                         {
-                            for(Klient klient : listaKlientow)
+                            for (Klient klient : listaKlientow)
                             {
-                                if(klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
+                                if (klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
                                 {
                                     klient.czyJestWKolejce = false;
                                     klient.czyJestObslugiwany = false;
@@ -142,18 +160,44 @@ public class FederatKasa extends AbstractFederat
                             kasa.aktualnieObslugiwanyKlient.czyJestWKolejce = false;
                             kasa.aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
                             sendZakonczenieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
+                            //listaKlientow.removeIf(klient -> klient.ID == kasa.aktualnieObslugiwanyKlient.ID);
+
                             log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID);
                             kasa.aktualnieObslugiwanyKlient = null;
                         }
                     }
                 }
 
-                if(fedamb.getCzyStopSymulacji())
+                //Pobieranie klientów do obsługi
+                for (Kasa kasa : listaKas)
                 {
-                    System.out.println("Amb: Odebrano Stop Interaction.");
-                    fedamb.running = false;
+                    if (kasa.aktualnieObslugiwanyKlient == null)
+                    {
+                        if (kasa.getLiczbaKlientowWKolejce() > 0)
+                        {
+                            kasa.kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
+                            kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
+                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
+                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
+                            kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());//kasa.liczbaKlientowWKolejce--;
+                            kasa.czyPrzepelniona = false;
+
+                            for (Klient klient : listaKlientow)
+                            {
+                                if (klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
+                                {
+                                    klient.czyJestObslugiwany = true;
+                                    klient.czyZostalObsluzony = false;
+                                    klient.rozpoczecieObslugi = currentTime;
+                                }
+                            }
+                            sendRozpoczecieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
+                            log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID);
+                        }
+                    }
                 }
             }
+
             advanceTime(timeStep);
         }
         disableTimePolicy();
@@ -171,7 +215,7 @@ public class FederatKasa extends AbstractFederat
             publishRozpocznijObsluge();
             publishZakonczObsluge();
         }
-        catch(RTIexception e)
+        catch (RTIexception e)
         {
             e.printStackTrace();
         }
