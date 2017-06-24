@@ -98,7 +98,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
 
     //Otwórz Kasę
     public int otworzKaseInteractionHandle;
-    public boolean czyJakasKasaJestPrzepelniona = false; //dla menago
+    private boolean czyOtworzycKase = false;
 
     //Początek symulacji
     public int startSymulacjiHandle;
@@ -272,6 +272,10 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         }
     }
 
+    public void obsluzOtoworzKase(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        setCzyOtworzycKase(true);
+    }
 
 
     public void obsluzWejscieDoKolejki(ReceivedInteraction theInteraction, LogicalTime theTime)
@@ -429,5 +433,15 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public void setCzyKlientZostalObsluzony(boolean czyKlientZostalObsluzony)
     {
         this.czyKlientZostalObsluzony = czyKlientZostalObsluzony;
+    }
+
+    public boolean getCzyOtworzycKase()
+    {
+        return czyOtworzycKase;
+    }
+
+    public void setCzyOtworzycKase(boolean czyOtworzycKase)
+    {
+        this.czyOtworzycKase = czyOtworzycKase;
     }
 }

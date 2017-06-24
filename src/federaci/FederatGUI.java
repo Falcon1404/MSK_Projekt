@@ -156,6 +156,7 @@ public class FederatGUI extends AbstractFederat
 
         textArea2 = new JTextArea();
         textArea2.setEnabled(true);
+        textArea2.setLineWrap(true);
         textArea2.setEditable(false);
         stan = new Stan(textArea2);
         JScrollPane scrollPane2 = new JScrollPane();
@@ -229,6 +230,10 @@ public class FederatGUI extends AbstractFederat
                 if (myInteraction.interactionClass == fedamb.zakonczenieObslugiInteractionHandle)
                 {
                     fedamb.obsluzZakonczenieObslugi(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if (myInteraction.interactionClass == fedamb.otworzKaseInteractionHandle)
+                {
+                    fedamb.obsluzOtoworzKase(myInteraction.theInteraction, myInteraction.theTime);
                 }
 
                 if(fedamb.getCzyKlientWszedlDoKolejki())
@@ -312,7 +317,14 @@ public class FederatGUI extends AbstractFederat
                 sendNowaKasaInteraction(kasa);
                 stan.dodajKasa(kasa.ID);
             }
-
+            if(fedamb.getCzyOtworzycKase())
+            {
+                Kasa kasa = generateAndAddKasa();
+                sendNowaKasaInteraction(kasa);
+                stan.dodajKasa(kasa.ID);
+                fedamb.setCzyOtworzycKase(false);
+                log(federateName + " dodano kase " + fedamb.kasaIDAttributeValue + " na polecenie Menadzera.");
+            }
             advanceTime(timeStep);
         }
         disableTimePolicy();
@@ -347,6 +359,7 @@ public class FederatGUI extends AbstractFederat
             subscribeWejscieDoKolejki();
             subscribeRozpocznijObsluge();
             subscribeZakonczObsluge();
+            subscribeOtworzKase();
         }
         catch(RTIexception e)
         {

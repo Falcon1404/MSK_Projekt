@@ -389,16 +389,21 @@ public abstract class AbstractFederat
     {
         if(listaKas.size() > 0)
         {
-            for(int i = 0; i < listaKas.size(); i++)
+            for(Kasa kasa : listaKas)
             {
-                if(listaKas.get(i).ID == ID)
+                if(kasa.ID == ID)
                 {
-                    listaKas.get(i).setLiczbaKlientowWKolejce(listaKas.get(i).getLiczbaKlientowWKolejce()+1);
-                    listaKas.get(i).addKlient(klient);
-                    if(listaKas.get(i).getLiczbaKlientowWKolejce() >= listaKas.get(i).MAX_LICZBA_KLIENTOW)
+                    kasa.setLiczbaKlientowWKolejce(kasa.getLiczbaKlientowWKolejce()+1);
+                    kasa.addKlient(klient);
+                    if(kasa.getLiczbaKlientowWKolejce() >= kasa.MAX_LICZBA_KLIENTOW)
                     {
-                        listaKas.get(i).czyPrzepelniona = true;
-                        //TODO sendOverloadInteraction
+                        kasa.czyPrzepelniona = true;
+                        kasa.setLiczbaKlientowWKolejce(kasa.getLiczbaKlientowWKolejce());
+                    }
+                    else
+                    {
+                        kasa.czyPrzepelniona = false;
+                        kasa.setLiczbaKlientowWKolejce(kasa.getLiczbaKlientowWKolejce());
                     }
                 }
             }
@@ -621,6 +626,14 @@ public abstract class AbstractFederat
         rtiamb.sendInteraction(fedamb.kasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
         log("Wyslano kase " + kasa.ID);
+    }
+
+    public void sendOtworzKaseInteraction() throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+        fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_OTWORZ_KASE);
+        rtiamb.sendInteraction(fedamb.otworzKaseInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+//        log("Menedzer otworzyl nowa kase.");
     }
 
     public int getIDKasa()

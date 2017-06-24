@@ -124,15 +124,15 @@ public class Stan
     public String toString()
     {
         clearString();
-        appendToString("Wejscie:");
+        appendToString("Teren sklepu: ");
         for (Integer integer : terenSklepu)
         {
             appendToString("["+integer+"]  ");
         }
-        appendToString("\n");
+        appendToString("\n\n\n\n");
 
         listaKas.forEach((integer, integer2) -> {
-                appendToString("" + integer + ":");
+                appendToString("KASA " + integer + ":  ");
                 try
                 {
                     for (Integer integer4 : kolejkiDoKas.get(integer))
@@ -143,7 +143,7 @@ public class Stan
                 catch (Exception e)
                 {
                 }
-            appendToString("\n");
+            appendToString("\n\n");
         });
         return string;
     }

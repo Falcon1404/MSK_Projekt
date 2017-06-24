@@ -71,8 +71,6 @@ public class FederatKasa extends AbstractFederat
                 {
                     fedamb.obsluzWejscieDoKolejki(myInteraction.theInteraction, myInteraction.theTime);
                 }
-
-
                 if (fedamb.getCzyTworzycKlienta())
                 {
                     Klient klient = new Klient(fedamb.klientIDAttributeValue, fedamb.klientCzasUtworzeniaAttributeValue,
@@ -91,14 +89,15 @@ public class FederatKasa extends AbstractFederat
                     fedamb.setCzyTworzycVIP(false);
                     log("Dodano klient VIP " + fedamb.klientIDAttributeValue);
                 }
-                if (fedamb.getCzyTworzycKase())
+                if(fedamb.getCzyTworzycKase())
                 {
                     Kasa kasa = new Kasa(fedamb.kasaIDAttributeValue, fedamb.kasaLiczbaKlientowWKolejceAttributeValue,
                             fedamb.kasaCzyPrzepelnionaAttributeValue);
                     listaKas.add(kasa);
                     fedamb.setCzyTworzycKase(false);
-                    log("Dodano kase " + fedamb.kasaIDAttributeValue);
+                    log(federateName + " dodano kase " + fedamb.kasaIDAttributeValue);
                 }
+
 
                 //Wejście do kolejki
                 if (fedamb.getCzyKlientWszedlDoKolejki())
@@ -119,7 +118,6 @@ public class FederatKasa extends AbstractFederat
                 }
 
 
-
                 if (fedamb.getCzyStopSymulacji())
                 {
                     System.out.println("Amb: Odebrano Stop Interaction.");
@@ -128,19 +126,17 @@ public class FederatKasa extends AbstractFederat
             }
             fedamb.listaInterakcji.clear();
 
-            for(Kasa kasa : listaKas)
-            {
-                kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
-                if(kasa.getLiczbaKlientowWKolejce() < kasa.MAX_LICZBA_KLIENTOW)
-                {
-                    kasa.czyPrzepelniona = false;
-                }
-            }
             if (fedamb.getCzyStartSymulacji())
             {
                 //Obsluga klientów
                 for (Kasa kasa : listaKas)
                 {
+                    kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
+                    if(kasa.getLiczbaKlientowWKolejce() < kasa.MAX_LICZBA_KLIENTOW)
+                    {
+                        kasa.czyPrzepelniona = false;
+                    }
+
                     if (kasa.aktualnieObslugiwanyKlient != null)
                     {
                         if (kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony(currentTime))
@@ -160,7 +156,6 @@ public class FederatKasa extends AbstractFederat
                             kasa.aktualnieObslugiwanyKlient.czyJestWKolejce = false;
                             kasa.aktualnieObslugiwanyKlient.zakonczenieObslugi = currentTime;
                             sendZakonczenieObslugi(kasa.aktualnieObslugiwanyKlient.ID, kasa.ID);
-                            //listaKlientow.removeIf(klient -> klient.ID == kasa.aktualnieObslugiwanyKlient.ID);
 
                             log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID);
                             kasa.aktualnieObslugiwanyKlient = null;
@@ -171,14 +166,20 @@ public class FederatKasa extends AbstractFederat
                 //Pobieranie klientów do obsługi
                 for (Kasa kasa : listaKas)
                 {
+                    kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
+                    if(kasa.getLiczbaKlientowWKolejce() < kasa.MAX_LICZBA_KLIENTOW)
+                    {
+                        kasa.czyPrzepelniona = false;
+                    }
+
                     if (kasa.aktualnieObslugiwanyKlient == null)
                     {
                         if (kasa.getLiczbaKlientowWKolejce() > 0)
                         {
                             kasa.kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
                             kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
-                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
-                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
+//                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
+//                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
                             kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());//kasa.liczbaKlientowWKolejce--;
                             kasa.czyPrzepelniona = false;
 
@@ -186,6 +187,7 @@ public class FederatKasa extends AbstractFederat
                             {
                                 if (klient.ID == kasa.aktualnieObslugiwanyKlient.ID)
                                 {
+                                    klient.czyJestWKolejce = false;
                                     klient.czyJestObslugiwany = true;
                                     klient.czyZostalObsluzony = false;
                                     klient.rozpoczecieObslugi = currentTime;

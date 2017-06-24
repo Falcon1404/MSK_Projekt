@@ -60,9 +60,8 @@ public class Klient
         if(federateTime >= rozpoczecieObslugi + czasObslugi)
         {
             czyZostalObsluzony = true;
-            return true;
         }
-        return false;
+        return czyZostalObsluzony;
     }
 
 }
