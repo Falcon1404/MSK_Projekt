@@ -128,13 +128,8 @@ public class FederatMenedzer extends AbstractFederat
                     fedamb.setCzyKlientJestObslugiwany(false);
                     for(Kasa kasa : listaKas)
                     {
-//                        log("Kasa " + kasa.ID + " kolejka = " + kasa.getLiczbaKlientowWKolejce());
                         if(kasa.ID == fedamb.IDKasaRozpoczecieObslugiValue)
                         {
-                            //kasa.setLiczbaKlientowWKolejce(kasa.getLiczbaKlientowWKolejce()-1);
-                            //log("Kasa " + kasa.ID + " kolejka = " + kasa.getLiczbaKlientowWKolejce());
-                            //kasa.czyPrzepelniona = false;
-                            //log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID);
                         }
                     }
                 }

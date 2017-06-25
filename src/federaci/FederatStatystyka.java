@@ -144,9 +144,6 @@ public class FederatStatystyka extends AbstractFederat
                                     klient.zakonczenieObslugi = currentTime;
                                     kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
                                     log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID + " t = " + currentTime);
-//                                    log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " zostal obsluzony w kasie " + kasa.ID
-//                                            + " po czasie " +  kasa.aktualnieObslugiwanyKlient.czasObslugi
-//                                            + " dlugosc kolejki " + kasa.getLiczbaKlientowWKolejce());
                                     kasa.aktualnieObslugiwanyKlient = null;
                                     kasa.czyPrzepelniona = false;
                                 }
@@ -165,14 +162,12 @@ public class FederatStatystyka extends AbstractFederat
                         {
                             for(Kasa kasa : listaKas)
                             {
-//                                log("Kasa " + kasa.ID + " kolejka = " + kasa.getLiczbaKlientowWKolejce());
                                 if(kasa.ID == fedamb.IDKasaRozpoczecieObslugiValue)
                                 {
                                     klient.rozpoczecieObslugi = currentTime;
                                     klient.czyJestObslugiwany = true;
                                     kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
                                     kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
-//                                    log("Kasa " + kasa.ID + " kolejka = " + kasa.getLiczbaKlientowWKolejce());
                                     kasa.czyPrzepelniona = false;
                                     log("Klient " + kasa.aktualnieObslugiwanyKlient.ID + " jest obslugiwany w kasie " + kasa.ID + " t = " + currentTime);
                                 }
@@ -237,7 +232,6 @@ public class FederatStatystyka extends AbstractFederat
 
                         liczbaKlientowPobytuWKolejce++;
                         lacznyCzasPobytuWKolejce += ((klient.rozpoczecieObslugi - klient.wejscieDoKolejki));
-//                                + (klient.czasZakoczeniaZakupow - klient.czasUtworzeniaKlienta));
                     }
                     if(liczbaKlientowCzasObslugi > 0)
                     {
