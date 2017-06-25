@@ -19,11 +19,6 @@ public class Klient
     public boolean czyZostalObsluzony = false;
     public boolean czyVIP = false;
 
-
-    //1. czasUtworzeniaKlienta 1800
-    //2. czasZakoczeniaZakupow 2400
-    //3. wejscieDoKolejki 2600 (2600 - 2400) + (2400 - 1800)
-
     public Klient(int ID, double czasUtworzeniaKlienta, double czasZakoczeniaZakupow, int iloscTowarow, double iloscGotowki)
     {
         this.ID = ID;
@@ -31,8 +26,8 @@ public class Klient
         this.iloscGotowki = iloscGotowki;
         this.iloscTowarow = iloscTowarow;
         this.czasZakoczeniaZakupow = czasZakoczeniaZakupow;
-        this.czasObslugi = iloscTowarow * 500.0;
-//        this.czasObslugi = 600.0;
+        this.czasObslugi = iloscTowarow * 200.0;
+//        this.czasObslugi = 400.0;
     }
 
     public Klient(int ID, double czasUtworzeniaKlienta, double czasZakoczeniaZakupow, int iloscTowarow, double iloscGotowki, boolean czyVIP)
@@ -42,8 +37,8 @@ public class Klient
         this.iloscGotowki = iloscGotowki;
         this.iloscTowarow = iloscTowarow;
         this.czasZakoczeniaZakupow = czasZakoczeniaZakupow;
-                this.czasObslugi = iloscTowarow * 500.0;
-//        this.czasObslugi = 600.0;
+        this.czasObslugi = iloscTowarow * 200.0;
+//        this.czasObslugi = 400.0;
         this.czyVIP = czyVIP;
     }
 

@@ -29,4 +29,10 @@ public class Dane
     public static final int LICZBA_POCZATKOWYCH_KLIENTOW = 10;
     public static final int LICZBA_POCZATKOWYCH_VIP = 3;
 
+    public static final String HLA_SREDNI_CZAS_ZAKUPOW = "HLAinteractionRoot.SredniCzasZakupow";
+    public static final String HLA_SREDNI_CZAS_OBSLUGI = "HLAinteractionRoot.SredniCzasObslugi";
+    public static final String HLA_SREDNI_CZAS_W_KOLEJCE = "HLAinteractionRoot.SredniCzasWKolejce";
+
+    public static final String SREDNI_CZAS = "SredniCzas";
+
 }

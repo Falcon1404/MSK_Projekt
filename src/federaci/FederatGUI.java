@@ -12,6 +12,8 @@ import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class FederatGUI extends AbstractFederat
 {
@@ -267,7 +269,7 @@ public class FederatGUI extends AbstractFederat
         while (fedamb.running)
         {
             double currentTime = fedamb.getFederateTime();
-
+            Collections.sort(fedamb.listaInterakcji,  new MyInteraction.MyInteractionComparator());
             for(MyInteraction myInteraction : fedamb.listaInterakcji)
             {
                 if (myInteraction.interactionClass == fedamb.wejscieDoKolejkiInteractionHandle)
@@ -285,6 +287,18 @@ public class FederatGUI extends AbstractFederat
                 if (myInteraction.interactionClass == fedamb.otworzKaseInteractionHandle)
                 {
                     fedamb.obsluzOtoworzKase(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if(myInteraction.interactionClass == fedamb.sredniCzasZakupowHandle)
+                {
+                    fedamb.obsluzSredniCzasZakupow(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if(myInteraction.interactionClass == fedamb.sredniCzasWKolejceHandle)
+                {
+                    fedamb.obsluzSredniCzasWKolejce(myInteraction.theInteraction, myInteraction.theTime);
+                }
+                if(myInteraction.interactionClass == fedamb.sredniCzasObslugiHandle)
+                {
+                    fedamb.obsluzSredniCzasObslugi(myInteraction.theInteraction, myInteraction.theTime);
                 }
 
                 if(fedamb.getCzyKlientWszedlDoKolejki())
@@ -332,6 +346,22 @@ public class FederatGUI extends AbstractFederat
                             stan.usunKlienta(fedamb.IDKlientZakonczenieObslugiValue);
                         }
                     }
+                }
+
+                if(fedamb.getCzySredniCzasZakupow())
+                {
+                    fedamb.setCzySredniCzasZakupow(false);
+                    sredniCzasZakupowValue.setText("" + fedamb.czasZakupowValue);
+                }
+                if(fedamb.getCzySredniCzasWKolejce())
+                {
+                    fedamb.setCzySredniCzasZakupow(false);
+                    sredniCzasPobytuWKolejceValue.setText("" + fedamb.czasWKolejceValue);
+                }
+                if(fedamb.getCzySredniCzasObslugi())
+                {
+                    fedamb.setCzySredniCzasZakupow(false);
+                    sredniCzasObslugiValue.setText("" + fedamb.czasObslugiValue);
                 }
             }
             fedamb.listaInterakcji.clear();
@@ -411,6 +441,9 @@ public class FederatGUI extends AbstractFederat
             subscribeRozpocznijObsluge();
             subscribeZakonczObsluge();
             subscribeOtworzKase();
+            subscribeSredniCzasZakupow();
+            subscribeSredniCzasWKolejce();
+            subscribeSredniCzasObslugi();
         }
         catch(RTIexception e)
         {

@@ -7,13 +7,13 @@ import model.Kasa;
 import model.Klient;
 import model.MyInteraction;
 
+import java.util.Collections;
 import java.util.Random;
 
 public class FederatMenedzer extends AbstractFederat
 {
     private Random rand = new Random();
     private boolean czyWyslacKase = true;
-    private boolean menagoPrzepelniona = true;
 
     public static void main(String[] args)
     {
@@ -48,6 +48,7 @@ public class FederatMenedzer extends AbstractFederat
         while (fedamb.running)
         {
             double currentTime = fedamb.getFederateTime();
+            Collections.sort(fedamb.listaInterakcji,  new MyInteraction.MyInteractionComparator());
             for (MyInteraction myInteraction : fedamb.listaInterakcji)
             {
                 if (myInteraction.interactionClass == fedamb.startSymulacjiHandle)
@@ -152,6 +153,7 @@ public class FederatMenedzer extends AbstractFederat
                     }
                 }
 
+                boolean menagoPrzepelniona = true;
                 for (Kasa kasa : listaKas)
                 {
                     if(!kasa.czyPrzepelniona)

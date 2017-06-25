@@ -7,6 +7,8 @@
     <interactions>
         <interactionClass name="HLAinteractionRoot" sharing="PublishSubscribe"
                           dimensions="NA" transportation="HLAreliable" order="Receive">
+
+
             <interactionClass name="NowyKlient" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
@@ -17,6 +19,8 @@
                 <parameter name="iloscTowarow" dataType="HLAinteger32BE" semantics="NA" />
                 <parameter name="czyVIP" dataType="HLAboolean" semantics="NA" />
             </interactionClass>
+
+
             <interactionClass name="NowaKasa" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
@@ -24,36 +28,70 @@
                 <parameter name="liczbaKlientowWKolejce" dataType="HLAinteger32BE" semantics="NA" />
                 <parameter name="czyPrzepelniona" dataType="HLAboolean" semantics="NA" />
             </interactionClass>
+
+
             <interactionClass name="RozpoczecieObslugi" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
 				<parameter name="IDKlient" dataType="HLAinteger32BE" semantics="NA" />
                 <parameter name="IDKasa" dataType="HLAinteger32BE" semantics="NA" />
             </interactionClass>
+
+
             <interactionClass name="ZakonczenieObslugi" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
 				<parameter name="IDKlient" dataType="HLAinteger32BE" semantics="NA" />
                 <parameter name="IDKasa" dataType="HLAinteger32BE" semantics="NA" />
-            </interactionClass>    
+            </interactionClass>
+
+
             <interactionClass name="WejscieDoKolejki" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
                 <parameter name="IDKlient" dataType="HLAinteger32BE" semantics="NA" />
                 <parameter name="IDKasa" dataType="HLAinteger32BE" semantics="NA" />
             </interactionClass>
+
+
 			<interactionClass name="OtworzKase" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
             </interactionClass>
+
+
             <interactionClass name="StartSymulacji" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
             </interactionClass>
+
+
             <interactionClass name="StopSymulacji" sharing="PublishSubscribe"
                               dimensions="NA" transportation="HLAreliable" order="TimeStamp"
                               semantics="NA">
             </interactionClass>
+
+
+            <interactionClass name="SredniCzasZakupow" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="TimeStamp"
+                              semantics="NA">
+                <parameter name="SredniCzas" dataType="HLAinteger32BE" semantics="NA" />
+            </interactionClass>
+
+
+            <interactionClass name="SredniCzasObslugi" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="TimeStamp"
+                              semantics="NA">
+                <parameter name="SredniCzas" dataType="HLAinteger32BE" semantics="NA" />
+            </interactionClass>
+
+
+            <interactionClass name="SredniCzasWKolejce" sharing="PublishSubscribe"
+                              dimensions="NA" transportation="HLAreliable" order="TimeStamp"
+                              semantics="NA">
+                <parameter name="SredniCzas" dataType="HLAinteger32BE" semantics="NA" />
+            </interactionClass>
+
         </interactionClass>
     </interactions>
 </objectModel>

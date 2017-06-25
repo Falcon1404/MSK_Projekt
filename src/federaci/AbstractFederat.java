@@ -321,6 +321,48 @@ public abstract class AbstractFederat
         rtiamb.subscribeInteractionClass(fedamb.stopSymulacjiHandle);
     }
 
+    public void publishSredniCzasZakupow() throws RTIexception
+    {
+        fedamb.sredniCzasZakupowHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_ZAKUPOW);
+        fedamb.czasZakupowHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasZakupowHandle);
+        rtiamb.publishInteractionClass(fedamb.sredniCzasZakupowHandle);
+    }
+
+    public void subscribeSredniCzasZakupow() throws RTIexception
+    {
+        fedamb.sredniCzasZakupowHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_ZAKUPOW);
+        fedamb.czasZakupowHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasZakupowHandle);
+        rtiamb.subscribeInteractionClass(fedamb.sredniCzasZakupowHandle);
+    }
+
+    public void publishSredniCzasObslugi() throws RTIexception
+    {
+        fedamb.sredniCzasObslugiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_OBSLUGI);
+        fedamb.czasObslugiHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasObslugiHandle);
+        rtiamb.publishInteractionClass(fedamb.sredniCzasObslugiHandle);
+    }
+
+    public void subscribeSredniCzasObslugi() throws RTIexception
+    {
+        fedamb.sredniCzasObslugiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_OBSLUGI);
+        fedamb.czasObslugiHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasObslugiHandle);
+        rtiamb.subscribeInteractionClass(fedamb.sredniCzasObslugiHandle);
+    }
+
+    public void publishSredniCzasWKolejce() throws RTIexception
+    {
+        fedamb.sredniCzasWKolejceHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_W_KOLEJCE);
+        fedamb.czasWKolejceHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasWKolejceHandle);
+        rtiamb.publishInteractionClass(fedamb.sredniCzasWKolejceHandle);
+    }
+
+    public void subscribeSredniCzasWKolejce() throws RTIexception
+    {
+        fedamb.sredniCzasWKolejceHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_W_KOLEJCE);
+        fedamb.czasWKolejceHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasWKolejceHandle);
+        rtiamb.subscribeInteractionClass(fedamb.sredniCzasWKolejceHandle);
+    }
+
     public LogicalTime convertTime(double time)
     {
         return (LogicalTime) new DoubleTime(time);
@@ -349,42 +391,6 @@ public abstract class AbstractFederat
         }
     }
 
-    private double getLbts()
-    {
-        return fedamb.federateTime + fedamb.federateLookahead;
-    }
-
-    public void aktualizacjaKasy(int ID, int liczbaKlientowWKolejce, boolean czyPrzepelniona)
-    {
-        if(listaKas.size() > 0)
-        {
-            for(int i = 0; i < listaKas.size(); i++)
-            {
-                if(listaKas.get(i).ID == ID)
-                {
-                    listaKas.get(i).setLiczbaKlientowWKolejce(liczbaKlientowWKolejce);
-                    listaKas.get(i).czyPrzepelniona = czyPrzepelniona;
-                }
-            }
-        }
-    }
-
-    public void aktualizacjaKlienta(int ID, int iloscTowarow, boolean czyVIP, int nrKasy)
-    {
-        if(listaKlientow.size() > 0)
-        {
-            for(int i = 0; i < listaKlientow.size(); i++)
-            {
-                if(listaKlientow.get(i).ID == ID)
-                {
-                    listaKlientow.get(i).iloscTowarow = iloscTowarow;
-                    listaKlientow.get(i).czyVIP = czyVIP;
-                    listaKlientow.get(i).nrKasy = nrKasy;
-                }
-            }
-        }
-    }
-
     public void dodajKlientaDoKasy(int ID, Klient klient)
     {
         if(listaKas.size() > 0)
@@ -410,55 +416,6 @@ public abstract class AbstractFederat
         }
     }
 
-    public void aktualizujCzasZakonczeniaObslugi(int ID, double czasZakonczeniaObslugi)
-    {
-        for(int i = 0; i < listaKlientow.size(); i++)
-        {
-            if(listaKlientow.get(i).ID == ID)
-            {
-                listaKlientow.get(i).zakonczenieObslugi = czasZakonczeniaObslugi;
-                listaKlientow.get(i).czyZostalObsluzony = true;
-            }
-        }
-    }
-
-    public void aktualizujCzasWejsciaDoKolejki(int ID, double czasWejsciaDoKolejki)
-    {
-        for(int i = 0; i < listaKlientow.size(); i++)
-        {
-            if(listaKlientow.get(i).ID == ID)
-            {
-                listaKlientow.get(i).wejscieDoKolejki = czasWejsciaDoKolejki;
-                listaKlientow.get(i).czySkonczylRobicZakupy = true;
-            }
-        }
-    }
-
-    public void usunKlientaZKasy(int IDKlient, int IDKasa)
-    {
-        for(int i = 0; i < listaKlientow.size(); i++)
-        {
-            if(listaKlientow.get(i).ID == IDKlient)
-            {
-                listaKlientow.remove(i);
-            }
-        }
-        for(int i = 0; i < listaKas.size(); i++)
-        {
-            if(listaKas.get(i).ID == IDKasa)
-            {
-                listaKas.get(i).setLiczbaKlientowWKolejce(listaKas.get(i).getLiczbaKlientowWKolejce()-1);
-                for(int j = 0; j < listaKas.get(i).kolejkaKlientow.size(); j++)
-                {
-                    if(listaKas.get(i).kolejkaKlientow.get(j).ID == IDKlient)
-                    {
-                        listaKas.get(i).kolejkaKlientow.remove(j);
-                    }
-                }
-            }
-        }
-    }
-
     public void sendRozpoczecieObslugi(int IDKlient, int IDKasa) throws RTIexception
     {
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
@@ -472,8 +429,6 @@ public abstract class AbstractFederat
         parameters.add(fedamb.IDKlientRozpoczecieObslugiHandle, IDKlientValue);
         parameters.add(fedamb.IDKasaRozpoczecieObslugiHandle, IDKasaValue);
         rtiamb.sendInteraction(fedamb.rozpoczecieObslugiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
-
-//        log("Klient " + IDKlient + " jest obslugiwany w kasie " + IDKasa);
     }
 
     public void sendZakonczenieObslugi(int IDKlient, int IDKasa) throws RTIexception
@@ -510,6 +465,42 @@ public abstract class AbstractFederat
         rtiamb.sendInteraction(fedamb.wejscieDoKolejkiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
 
 //        log("Klient " + IDKlient + " wszedl do kasy " + IDKasa);
+    }
+
+    public void sendSredniCzasZakupow(int czasZakupow) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.sredniCzasZakupowHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_ZAKUPOW);
+        fedamb.czasZakupowHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasZakupowHandle);
+
+        byte[] czasZakupowValue = EncodingHelpers.encodeInt(czasZakupow);
+        parameters.add(fedamb.czasZakupowHandle, czasZakupowValue);
+        rtiamb.sendInteraction(fedamb.sredniCzasZakupowHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+    }
+
+    public void sendSredniCzasObslugi(int czasZakupow) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.sredniCzasObslugiHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_OBSLUGI);
+        fedamb.czasObslugiHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasObslugiHandle);
+
+        byte[] czasZakupowValue = EncodingHelpers.encodeInt(czasZakupow);
+        parameters.add(fedamb.czasObslugiHandle, czasZakupowValue);
+        rtiamb.sendInteraction(fedamb.sredniCzasObslugiHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
+    }
+
+    public void sendSredniCzasWKolejce(int czasZakupow) throws RTIexception
+    {
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+
+        fedamb.sredniCzasWKolejceHandle = rtiamb.getInteractionClassHandle(Dane.HLA_SREDNI_CZAS_W_KOLEJCE);
+        fedamb.czasWKolejceHandle = rtiamb.getParameterHandle(Dane.SREDNI_CZAS, fedamb.sredniCzasWKolejceHandle);
+
+        byte[] czasZakupowValue = EncodingHelpers.encodeInt(czasZakupow);
+        parameters.add(fedamb.czasWKolejceHandle, czasZakupowValue);
+        rtiamb.sendInteraction(fedamb.sredniCzasWKolejceHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
     }
 
     public void sendNowyKlientInteraction(Klient klient) throws RTIexception
@@ -572,8 +563,8 @@ public abstract class AbstractFederat
     {
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
-//        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
-        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
+        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
+//        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -591,8 +582,7 @@ public abstract class AbstractFederat
     {
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
-        //        double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
-        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
+                double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -601,7 +591,6 @@ public abstract class AbstractFederat
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki, true);
         listaKlientow.add(0, klient);
-//        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 

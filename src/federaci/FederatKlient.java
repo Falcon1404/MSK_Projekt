@@ -6,6 +6,7 @@ import model.Kasa;
 import model.Klient;
 import model.MyInteraction;
 
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -46,7 +47,7 @@ public class FederatKlient extends AbstractFederat
         while(fedamb.running)
         {
             double currentTime = fedamb.getFederateTime();
-
+            Collections.sort(fedamb.listaInterakcji,  new MyInteraction.MyInteractionComparator());
             for(MyInteraction myInteraction : fedamb.listaInterakcji)
             {
                 if (myInteraction.interactionClass == fedamb.startSymulacjiHandle)

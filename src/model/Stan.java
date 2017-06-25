@@ -132,6 +132,8 @@ public class Stan
         appendToString("\n\n\n\n");
 
         listaKas.forEach((integer, integer2) -> {
+            if(integer != 0)
+            {
                 appendToString("KASA " + integer + ":  ");
                 try
                 {
@@ -143,7 +145,8 @@ public class Stan
                 catch (Exception e)
                 {
                 }
-            appendToString("\n\n");
+                appendToString("\n\n");
+            }
         });
         return string;
     }

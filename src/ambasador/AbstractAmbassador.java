@@ -108,6 +108,23 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public int stopSymulacjiHandle;
     private boolean czyStopSymulacji = false;
 
+    //Sredni czas zakupow
+    public int sredniCzasZakupowHandle;
+    public int czasZakupowHandle;
+    public int czasZakupowValue;
+    private boolean czySredniCzasZakupow = false;
+
+    //Sredni czas obslugi
+    public int sredniCzasObslugiHandle;
+    public int czasObslugiHandle;
+    public int czasObslugiValue;
+    private boolean czySredniCzasObslugi = false;
+
+    //Sredni czas w kolejce
+    public int sredniCzasWKolejceHandle;
+    public int czasWKolejceHandle;
+    public int czasWKolejceValue;
+    private boolean czySredniCzasWKolejce = false;
 
     public AbstractAmbassador() {}
 
@@ -242,7 +259,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
         }
     }
 
-
     public void obsluzNowaKasa(ReceivedInteraction theInteraction, LogicalTime theTime)
     {
         for (int i = 0; i < theInteraction.size(); i++)
@@ -276,7 +292,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     {
         setCzyOtworzycKase(true);
     }
-
 
     public void obsluzWejscieDoKolejki(ReceivedInteraction theInteraction, LogicalTime theTime)
     {
@@ -353,6 +368,66 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
     {
         listaInterakcji.add(new MyInteraction(interactionClass, theInteraction, theTime));
+    }
+
+    public void obsluzSredniCzasZakupow(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
+        {
+            try
+            {
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == czasZakupowHandle)
+                {
+                    czasZakupowValue = EncodingHelpers.decodeInt(value);
+                }
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
+            }
+        }
+        setCzySredniCzasZakupow(true);
+    }
+
+    public void obsluzSredniCzasWKolejce(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
+        {
+            try
+            {
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == czasWKolejceHandle)
+                {
+                    czasWKolejceValue = EncodingHelpers.decodeInt(value);
+                }
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
+            }
+        }
+        setCzySredniCzasWKolejce(true);
+    }
+
+    public void obsluzSredniCzasObslugi(ReceivedInteraction theInteraction, LogicalTime theTime)
+    {
+        for (int i = 0; i < theInteraction.size(); i++)
+        {
+            try
+            {
+                byte[] value = theInteraction.getValue(i);
+                if (theInteraction.getParameterHandle(i) == czasObslugiHandle)
+                {
+                    czasObslugiValue = EncodingHelpers.decodeInt(value);
+                }
+            }
+            catch (Exception e)
+            {
+                log(e.getMessage());
+            }
+        }
+        setCzySredniCzasObslugi(true);
     }
 
     public boolean getCzyTworzycKlienta()
@@ -443,5 +518,35 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public void setCzyOtworzycKase(boolean czyOtworzycKase)
     {
         this.czyOtworzycKase = czyOtworzycKase;
+    }
+
+    public boolean getCzySredniCzasZakupow()
+    {
+        return czySredniCzasZakupow;
+    }
+
+    public void setCzySredniCzasZakupow(boolean czySredniCzasZakupow)
+    {
+        this.czySredniCzasZakupow = czySredniCzasZakupow;
+    }
+
+    public boolean getCzySredniCzasObslugi()
+    {
+        return czySredniCzasObslugi;
+    }
+
+    public void setCzySredniCzasObslugi(boolean czySredniCzasObslugi)
+    {
+        this.czySredniCzasObslugi = czySredniCzasObslugi;
+    }
+
+    public boolean getCzySredniCzasWKolejce()
+    {
+        return czySredniCzasWKolejce;
+    }
+
+    public void setCzySredniCzasWKolejce(boolean czySredniCzasWKolejce)
+    {
+        this.czySredniCzasWKolejce = czySredniCzasWKolejce;
     }
 }
