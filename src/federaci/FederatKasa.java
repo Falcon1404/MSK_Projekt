@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class FederatKasa extends AbstractFederat
 {
-    //    private static final String federateName = "FederatKasa";
     private Random rand = new Random();
 
     public static void main(String[] args)
@@ -178,9 +177,7 @@ public class FederatKasa extends AbstractFederat
                         {
                             kasa.kolejkaKlientow.get(0).rozpoczecieObslugi = currentTime;
                             kasa.aktualnieObslugiwanyKlient = kasa.kolejkaKlientow.remove(0);
-//                            kasa.aktualnieObslugiwanyKlient.czyJestObslugiwany = true;
-//                            kasa.aktualnieObslugiwanyKlient.czyZostalObsluzony = false;
-                            kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());//kasa.liczbaKlientowWKolejce--;
+                            kasa.setLiczbaKlientowWKolejce(kasa.kolejkaKlientow.size());
                             kasa.czyPrzepelniona = false;
 
                             for (Klient klient : listaKlientow)

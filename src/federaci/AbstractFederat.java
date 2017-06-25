@@ -552,7 +552,7 @@ public abstract class AbstractFederat
 
     public int getIDKlient()
     {
-        int ID = 0;
+        int ID = 1;
         if(listaKlientow.size() > 0)
         {
             ID = listaKlientow.get(0).ID;
@@ -638,7 +638,7 @@ public abstract class AbstractFederat
 
     public int getIDKasa()
     {
-        int ID = 0;
+        int ID = 1;
         if(listaKas.size() > 0)
         {
             ID = listaKas.get(0).ID;

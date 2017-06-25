@@ -25,6 +25,12 @@ public class FederatGUI extends AbstractFederat
     private JLabel klientText;
     private JLabel symulacjaText;
     private JLabel kasaText;
+    private JLabel sredniCzasZakupowText;
+    private JLabel sredniCzasZakupowValue;
+    private JLabel sredniCzasPobytuWKolejceText;
+    private JLabel sredniCzasPobytuWKolejceValue;
+    private JLabel sredniCzasCzasObslugiText;
+    private JLabel sredniCzasObslugiValue;
     private static JTextArea textArea;
     private JScrollPane scrollPane;
     private JTextArea textArea2;
@@ -40,6 +46,51 @@ public class FederatGUI extends AbstractFederat
     {
         frame = new JFrame("I6B2S4 Joanna Bednarko i Joanna Koszela - Metody i techniki symulacji komputerowej");
         JPanel panel = new JPanel();
+
+
+        sredniCzasZakupowText = new JLabel("Średni czas robienia zakupów: ");
+        sredniCzasZakupowText.setVisible(true);
+        sredniCzasZakupowText.setSize(300, 30);
+        sredniCzasZakupowText.setLocation(130, 30);
+        sredniCzasZakupowText.setFont(new Font("Calibri", Font.BOLD, 20));
+        panel.add(sredniCzasZakupowText);
+
+        sredniCzasZakupowValue = new JLabel("0.0");
+        sredniCzasZakupowValue.setVisible(true);
+        sredniCzasZakupowValue.setSize(100, 30);
+        sredniCzasZakupowValue.setLocation(395, 30);
+        sredniCzasZakupowValue.setFont(new Font("Calibri", Font.PLAIN, 20));
+        panel.add(sredniCzasZakupowValue);
+
+
+        sredniCzasPobytuWKolejceText = new JLabel("Średni czas pobytu w kolejce: ");
+        sredniCzasPobytuWKolejceText.setVisible(true);
+        sredniCzasPobytuWKolejceText.setSize(300, 30);
+        sredniCzasPobytuWKolejceText.setLocation(640, 30);
+        sredniCzasPobytuWKolejceText.setFont(new Font("Calibri", Font.BOLD, 20));
+        panel.add(sredniCzasPobytuWKolejceText);
+
+        sredniCzasPobytuWKolejceValue = new JLabel("0.0");
+        sredniCzasPobytuWKolejceValue.setVisible(true);
+        sredniCzasPobytuWKolejceValue.setSize(100, 30);
+        sredniCzasPobytuWKolejceValue.setLocation(900, 30);
+        sredniCzasPobytuWKolejceValue.setFont(new Font("Calibri", Font.PLAIN, 20));
+        panel.add(sredniCzasPobytuWKolejceValue);
+
+
+        sredniCzasCzasObslugiText = new JLabel("Średni czas obsługi w kasie: ");
+        sredniCzasCzasObslugiText.setVisible(true);
+        sredniCzasCzasObslugiText.setSize(300, 30);
+        sredniCzasCzasObslugiText.setLocation(1160, 30);
+        sredniCzasCzasObslugiText.setFont(new Font("Calibri", Font.BOLD, 20));
+        panel.add(sredniCzasCzasObslugiText);
+
+        sredniCzasObslugiValue = new JLabel("0.0");
+        sredniCzasObslugiValue.setVisible(true);
+        sredniCzasObslugiValue.setSize(100, 30);
+        sredniCzasObslugiValue.setLocation(1400, 30);
+        sredniCzasObslugiValue.setFont(new Font("Calibri", Font.PLAIN, 20));
+        panel.add(sredniCzasObslugiValue);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         klientText = new JLabel("KLIENT");
@@ -323,7 +374,7 @@ public class FederatGUI extends AbstractFederat
                 sendNowaKasaInteraction(kasa);
                 stan.dodajKasa(kasa.ID);
                 fedamb.setCzyOtworzycKase(false);
-                log(federateName + " dodano kase " + fedamb.kasaIDAttributeValue + " na polecenie Menadzera.");
+                log("Dodano kase " + kasa.ID + " na polecenie Menadzera.");
             }
             advanceTime(timeStep);
         }

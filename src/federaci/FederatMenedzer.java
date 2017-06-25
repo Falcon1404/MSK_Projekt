@@ -13,6 +13,7 @@ public class FederatMenedzer extends AbstractFederat
 {
     private Random rand = new Random();
     private boolean czyWyslacKase = true;
+    private boolean menagoPrzepelniona = true;
 
     public static void main(String[] args)
     {
@@ -53,22 +54,18 @@ public class FederatMenedzer extends AbstractFederat
                 {
                     fedamb.obsluzStartSymulacji(myInteraction.theInteraction, myInteraction.theTime);
                 }
-
                 if (myInteraction.interactionClass == fedamb.stopSymulacjiHandle)
                 {
                     fedamb.obsluzStopSymulacji(myInteraction.theInteraction, myInteraction.theTime);
                 }
-
                 if (myInteraction.interactionClass == fedamb.nowyKlientInteractionHandle)
                 {
                     fedamb.obsluzNowyKlientInteractionHandle(myInteraction.theInteraction, myInteraction.theTime);
                 }
-
                 if (myInteraction.interactionClass == fedamb.kasaInteractionHandle)
                 {
                     fedamb.obsluzNowaKasa(myInteraction.theInteraction, myInteraction.theTime);
                 }
-
                 if (myInteraction.interactionClass == fedamb.wejscieDoKolejkiInteractionHandle)
                 {
                     fedamb.obsluzWejscieDoKolejki(myInteraction.theInteraction, myInteraction.theTime);
@@ -155,7 +152,6 @@ public class FederatMenedzer extends AbstractFederat
                     }
                 }
 
-                boolean menagoPrzepelniona = true;
                 for (Kasa kasa : listaKas)
                 {
                     if(!kasa.czyPrzepelniona)
@@ -175,7 +171,7 @@ public class FederatMenedzer extends AbstractFederat
 
             if(fedamb.getCzyStopSymulacji())
             {
-                System.out.println("Amb: Odebrano Stop Interaction.");
+                System.out.println("Odebrano: Stop Interaction.");
                 fedamb.running = false;
             }
             fedamb.listaInterakcji.clear();
