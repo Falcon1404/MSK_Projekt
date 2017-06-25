@@ -28,6 +28,7 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public boolean running = true;
 
     private boolean czyTworzycKlienta = false;
+    private boolean czyTworzycKlientow = false;
     private boolean czyTworzycVIP = false;
     private boolean czyTworzycKase = false;
 
@@ -543,5 +544,15 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public void setCzySredniCzasWKolejce(boolean czySredniCzasWKolejce)
     {
         this.czySredniCzasWKolejce = czySredniCzasWKolejce;
+    }
+
+    public boolean getCzyTworzycKlientow()
+    {
+        return czyTworzycKlientow;
+    }
+
+    public void setCzyTworzycKlientow(boolean czyTworzycKlientow)
+    {
+        this.czyTworzycKlientow = czyTworzycKlientow;
     }
 }

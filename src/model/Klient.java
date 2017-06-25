@@ -6,18 +6,20 @@ public class Klient
     public double iloscGotowki;
     public int nrKasy;
     public int iloscTowarow;
+    public double czasObslugi;
+    public double czasUtworzeniaKlienta;
+    public boolean czyVIP = false;
+
     public double wejscieDoKolejki;
     public double rozpoczecieObslugi;
     public double zakonczenieObslugi;
-    public double czasObslugi;
-    public double czasUtworzeniaKlienta;
     public double czasZakoczeniaZakupow;
 
     public boolean czyJestWKolejce = false;
     public boolean czySkonczylRobicZakupy = false;
     public boolean czyJestObslugiwany = false;
     public boolean czyZostalObsluzony = false;
-    public boolean czyVIP = false;
+
 
     public Klient(int ID, double czasUtworzeniaKlienta, double czasZakoczeniaZakupow, int iloscTowarow, double iloscGotowki)
     {

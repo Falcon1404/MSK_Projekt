@@ -22,6 +22,7 @@ public class FederatGUI extends AbstractFederat
     private JButton start;
     private JButton stop;
     private JButton nowyKlientZwykly;
+    private JButton nowy10KlientZwykly;
     private JButton nowyVIP;
     private JButton nowaKasa;
     private JLabel klientText;
@@ -98,7 +99,7 @@ public class FederatGUI extends AbstractFederat
         klientText = new JLabel("KLIENT");
         klientText.setVisible(true);
         klientText.setSize(100, 30);
-        klientText.setLocation(790, 270);
+        klientText.setLocation(790, 240);
         klientText.setFont(new Font("Calibri", Font.BOLD, 19));
         panel.add(klientText);
 
@@ -108,13 +109,29 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
+                fedamb.setCzyTworzycKlientow(false);
                 fedamb.setCzyTworzycKlienta(true);
                 fedamb.setCzyTworzycVIP(false);
             }
         });
         panel.add(nowyKlientZwykly);
         nowyKlientZwykly.setSize(100, 30);
-        nowyKlientZwykly.setLocation(770, 310);
+        nowyKlientZwykly.setLocation(770, 270);
+
+        nowy10KlientZwykly = new JButton(Dane.LICZBA_KLIENTOW + "x Zwykly");
+        nowy10KlientZwykly.setEnabled(false);
+        nowy10KlientZwykly.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                fedamb.setCzyTworzycKlientow(true);
+                fedamb.setCzyTworzycKlienta(false);
+                fedamb.setCzyTworzycVIP(false);
+            }
+        });
+        panel.add(nowy10KlientZwykly);
+        nowy10KlientZwykly.setSize(100, 30);
+        nowy10KlientZwykly.setLocation(770, 310);
 
 
         nowyVIP = new JButton("VIP");
@@ -123,6 +140,7 @@ public class FederatGUI extends AbstractFederat
         {
             public void actionPerformed(ActionEvent e)
             {
+                fedamb.setCzyTworzycKlientow(false);
                 fedamb.setCzyTworzycKlienta(false);
                 fedamb.setCzyTworzycVIP(true);
             }
@@ -168,6 +186,7 @@ public class FederatGUI extends AbstractFederat
             {
                 fedamb.setCzyStartSymulacji(true);
                 nowyKlientZwykly.setEnabled(true);
+                nowy10KlientZwykly.setEnabled(true);
                 nowyVIP.setEnabled(true);
                 nowaKasa.setEnabled(true);
                 start.setEnabled(false);
@@ -367,10 +386,13 @@ public class FederatGUI extends AbstractFederat
             }
             fedamb.listaInterakcji.clear();
 
+
+
             if(fedamb.getCzyStartSymulacji())
             {
                 fedamb.setCzyStartSymulacji(false);
                 sendStartInteraction();
+                fedamb.running = true;
             }
             if(fedamb.getCzyStopSymulacji())
             {
@@ -384,6 +406,16 @@ public class FederatGUI extends AbstractFederat
                 Klient klient = generateAndAddKlient();
                 sendNowyKlientInteraction(klient);
                 stan.dodajKlientNaTerenSklepu(klient.ID);
+            }
+            if(fedamb.getCzyTworzycKlientow())
+            {
+                fedamb.setCzyTworzycKlientow(false);
+                for(int i = 0; i < Dane.LICZBA_KLIENTOW; i++)
+                {
+                    Klient klient = generateAndAddKlient();
+                    sendNowyKlientInteraction(klient);
+                    stan.dodajKlientNaTerenSklepu(klient.ID);
+                }
             }
             if(fedamb.getCzyTworzycVIP())
             {

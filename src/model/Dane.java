@@ -35,4 +35,6 @@ public class Dane
 
     public static final String SREDNI_CZAS = "SredniCzas";
 
+    public static final int LICZBA_KLIENTOW = 10;
+
 }

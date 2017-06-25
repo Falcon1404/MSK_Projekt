@@ -72,6 +72,7 @@ public class FederatKasa extends AbstractFederat
                 {
                     fedamb.obsluzWejscieDoKolejki(myInteraction.theInteraction, myInteraction.theTime);
                 }
+
                 if (fedamb.getCzyTworzycKlienta())
                 {
                     Klient klient = new Klient(fedamb.klientIDAttributeValue, fedamb.klientCzasUtworzeniaAttributeValue,
@@ -121,7 +122,7 @@ public class FederatKasa extends AbstractFederat
 
                 if (fedamb.getCzyStopSymulacji())
                 {
-                    System.out.println("Amb: Odebrano Stop Interaction.");
+                    System.out.println("Odebrano Stop Interaction.");
                     fedamb.running = false;
                 }
             }

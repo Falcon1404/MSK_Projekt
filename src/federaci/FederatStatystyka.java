@@ -101,6 +101,7 @@ public class FederatStatystyka extends AbstractFederat
                     fedamb.obsluzZakonczenieObslugi(myInteraction.theInteraction, myInteraction.theTime);
                 }
 
+
                 if(fedamb.getCzyTworzycKlienta())
                 {
                     Klient klient = new Klient(fedamb.klientIDAttributeValue, currentTime,

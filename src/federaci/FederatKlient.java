@@ -7,13 +7,10 @@ import model.Klient;
 import model.MyInteraction;
 
 import java.util.Collections;
-import java.util.Random;
 
 
 public class FederatKlient extends AbstractFederat
 {
-    private Random rand = new Random();
-
     public static void main(String[] args)
     {
         try
@@ -233,7 +230,6 @@ public class FederatKlient extends AbstractFederat
                     }
                 }
             }
-
             advanceTime(timeStep);
         }
         disableTimePolicy();
