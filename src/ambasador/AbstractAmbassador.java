@@ -16,7 +16,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     public static final String AMBASSADOR_NAME = "AbstractAmbsassor";
     public static final String READY_TO_RUN = "ReadyToRun";
     public double federateTime = 0.0;
-    public double grantedTime = 0.0;
     public double federateLookahead = 1.0;
 
     public boolean isRegulating = false;
@@ -31,10 +30,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     private boolean czyTworzycKlienta = false;
     private boolean czyTworzycVIP = false;
     private boolean czyTworzycKase = false;
-    public boolean czyAktualizowacKase = false;
-    public int IDAktualizowanejKasy = -1;
-    public int dlugoscKolejki = -1;
-    public boolean czyPrzepelniona = false;
 
     public ArrayList<MyInteraction> listaInterakcji = new ArrayList<>();
 
@@ -197,6 +192,11 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
     {
         this.federateTime = convertTime(theTime);
         this.isAdvancing = false;
+    }
+
+    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
+    {
+        listaInterakcji.add(new MyInteraction(interactionClass, theInteraction, theTime));
     }
 
     public void obsluzStartSymulacji(ReceivedInteraction theInteraction, LogicalTime theTime)
@@ -363,11 +363,6 @@ public abstract class AbstractAmbassador extends NullFederateAmbassador
             }
         }
         setCzyKlientZostalObsluzony(true);
-    }
-
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle)
-    {
-        listaInterakcji.add(new MyInteraction(interactionClass, theInteraction, theTime));
     }
 
     public void obsluzSredniCzasZakupow(ReceivedInteraction theInteraction, LogicalTime theTime)

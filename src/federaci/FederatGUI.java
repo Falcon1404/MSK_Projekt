@@ -114,7 +114,7 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowyKlientZwykly);
         nowyKlientZwykly.setSize(100, 30);
-        nowyKlientZwykly.setLocation(770, 300);
+        nowyKlientZwykly.setLocation(770, 310);
 
 
         nowyVIP = new JButton("VIP");
@@ -129,13 +129,13 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowyVIP);
         nowyVIP.setSize(100, 30);
-        nowyVIP.setLocation(770, 340);
+        nowyVIP.setLocation(770, 350);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         kasaText = new JLabel("KASA");
         kasaText.setVisible(true);
         kasaText.setSize(100, 30);
-        kasaText.setLocation(800, 400);
+        kasaText.setLocation(800, 410);
         kasaText.setFont(new Font("Calibri", Font.BOLD, 19));
         panel.add(kasaText);
 
@@ -150,13 +150,13 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(nowaKasa);
         nowaKasa.setSize(100, 30);
-        nowaKasa.setLocation(770, 430);
+        nowaKasa.setLocation(770, 440);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         symulacjaText = new JLabel("SYMULACJA");
         symulacjaText.setVisible(true);
         symulacjaText.setSize(100, 30);
-        symulacjaText.setLocation(775, 100);
+        symulacjaText.setLocation(775, 110);
         symulacjaText.setFont(new Font("Calibri", Font.BOLD, 19));
         panel.add(symulacjaText);
 
@@ -176,7 +176,7 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(start);
         start.setSize(100, 30);
-        start.setLocation(770, 140);
+        start.setLocation(770, 150);
 
         stop = new JButton("STOP");
         stop.setEnabled(false);
@@ -194,7 +194,7 @@ public class FederatGUI extends AbstractFederat
         });
         panel.add(stop);
         stop.setSize(100, 30);
-        stop.setLocation(770, 180);
+        stop.setLocation(770, 190);
 
         textArea = new JTextArea();
         textArea.setEnabled(true);
@@ -269,7 +269,7 @@ public class FederatGUI extends AbstractFederat
         while (fedamb.running)
         {
             double currentTime = fedamb.getFederateTime();
-            Collections.sort(fedamb.listaInterakcji,  new MyInteraction.MyInteractionComparator());
+            Collections.sort(fedamb.listaInterakcji, new MyInteraction.MyInteractionComparator());
             for(MyInteraction myInteraction : fedamb.listaInterakcji)
             {
                 if (myInteraction.interactionClass == fedamb.wejscieDoKolejkiInteractionHandle)
@@ -308,7 +308,8 @@ public class FederatGUI extends AbstractFederat
                     {
                         if(klient.ID == fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue)
                         {
-                            log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " + fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
+                            log("Klient " + fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue + " wszedl do kolejki w kasie " +
+                                    fedamb.IDKasaWejscieDoKolejkiInteractionAttributeValue);
                             stan.usunKlientaZTerenuSklepu(fedamb.IDKlientWejscieDoKolejkiInteractionAttributeValue);
                             if(klient.czyVIP)
                             {

@@ -444,8 +444,6 @@ public abstract class AbstractFederat
         parameters.add(fedamb.IDKlientZakonczenieObslugiHandle, IDKlientValue);
         parameters.add(fedamb.IDKasaZakonczenieObslugiHandle, IDKasaValue);
         rtiamb.sendInteraction(fedamb.zakonczenieObslugiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
-
-//        log("Klient " + IDKlient + " zostal obslzony w kasie " + IDKasa);
     }
 
     public void sendWejscieDoKolejki(int IDKlient, int IDKasa) throws RTIexception
@@ -463,8 +461,6 @@ public abstract class AbstractFederat
         parameters.add(fedamb.IDKasaWejscieDoKolejkiInteractionAttributeHandle, IDKasaValue);
 
         rtiamb.sendInteraction(fedamb.wejscieDoKolejkiInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
-
-//        log("Klient " + IDKlient + " wszedl do kasy " + IDKasa);
     }
 
     public void sendSredniCzasZakupow(int czasZakupow) throws RTIexception
@@ -564,7 +560,6 @@ public abstract class AbstractFederat
         int ID = getIDKlient();
         double czasUtworzeniaKlienta = fedamb.getFederateTime();
         double czasZakonczeniaZakupow = rand.nextDouble()*(600.0 - 200.0) + 200.0 + czasUtworzeniaKlienta;
-//        double czasZakonczeniaZakupow = 600.0 + czasUtworzeniaKlienta;
         double iloscGotowki = 0.0;
         int iloscTowarow = rand.nextInt(6)+1;
         for(int i = 0; i < iloscTowarow; i++)
@@ -574,7 +569,6 @@ public abstract class AbstractFederat
         }
         Klient klient = new Klient(ID, czasUtworzeniaKlienta, czasZakonczeniaZakupow, iloscTowarow, iloscGotowki);
         listaKlientow.add(klient);
-//        log("Dodano klienta " + ID + " " + czasUtworzeniaKlienta + " " + czasZakonczeniaZakupow + " " + iloscTowarow + " " + iloscGotowki);
         return klient;
     }
 
@@ -613,7 +607,6 @@ public abstract class AbstractFederat
         parameters.add(fedamb.kasaCzyPrzepelnionaAttributeHandle, czyPrzepelniona);
 
         rtiamb.sendInteraction(fedamb.kasaInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
-
         log("Wyslano kase " + kasa.ID);
     }
 
@@ -622,7 +615,6 @@ public abstract class AbstractFederat
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         fedamb.otworzKaseInteractionHandle = rtiamb.getInteractionClassHandle(Dane.HLA_OTWORZ_KASE);
         rtiamb.sendInteraction(fedamb.otworzKaseInteractionHandle, parameters, "tag".getBytes(), convertTime(fedamb.getFederateTime() + 1.0));
-//        log("Menedzer otworzyl nowa kase.");
     }
 
     public int getIDKasa()

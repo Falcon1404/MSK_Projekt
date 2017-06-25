@@ -167,7 +167,7 @@ public class FederatKlient extends AbstractFederat
 
                 if(fedamb.getCzyStopSymulacji())
                 {
-                    System.out.println("Amb: Odebrano Stop Interaction.");
+                    System.out.println("Odebrano Stop Interaction.");
                     fedamb.running = false;
                 }
             }
